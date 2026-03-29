@@ -10,6 +10,7 @@ import {
   undoLastTurn,
 } from '@/lib/engine'
 import { saveMatch } from '@/lib/save-match'
+import { REM_SENTINEL } from '@/lib/constants'
 
 interface GameStore extends GameState {
   screen: Screen
