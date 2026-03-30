@@ -9,7 +9,7 @@ import { START_SCORES, LEGS_OPTIONS, SETS_OPTIONS } from '@/lib/constants'
 
 export function SetupScreen() {
   const startGame = useGameStore(s => s.startGame)
-  const [training, setTraining] = useState(false)
+  const [trainingMode, setTrainingMode] = useState<'match' | 'training'>('match')
   const [p1, setP1] = useState('Player 1')
   const [p2, setP2] = useState('Player 2')
   const [startScore, setStartScore] = useState<StartScore>(501)
@@ -25,7 +25,7 @@ export function SetupScreen() {
       outRule,
       legsToWin,
       setsToWin,
-      training,
+      training: trainingMode === 'training',
     }
     startGame(config)
   }
@@ -47,16 +47,16 @@ export function SetupScreen() {
             <label className={fieldLabel}>Mode</label>
             <PillGroup
               options={[
-                { label: 'Match', value: false },
-                { label: 'Training', value: true },
+                { label: 'Match', value: 'match' },
+                { label: 'Training', value: 'training' },
               ]}
-              value={training}
-              onChange={setTraining}
+              value={trainingMode}
+              onChange={v => setTrainingMode(v as 'match' | 'training')}
             />
           </div>
 
           <PlayerNameInput label="Player 1" value={p1} onChange={setP1} inputClassName={input} />
-          {!training && (
+          {trainingMode === 'match' && (
             <PlayerNameInput label="Player 2" value={p2} onChange={setP2} inputClassName={input} onEnter={handleStart} />
           )}
 

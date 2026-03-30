@@ -64,7 +64,7 @@ interface SpeechRec extends EventTarget {
 
 export function useSpeech() {
   const [supported, setSupported] = useState(false)
-  const [muted, setMuted] = useState(false)
+  const [muted, setMuted] = useState(true)
   const recRef = useRef<SpeechRec | null>(null)
   const mutedRef = useRef(false)
   const quickScoreRef = useRef(useGameStore.getState().quickScore)
@@ -104,7 +104,7 @@ export function useSpeech() {
     }
 
     recRef.current = rec
-    tryStart()
+    // don't auto-start — user must tap mic button
 
     return () => { rec.abort() }
   }, [])
