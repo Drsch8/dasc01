@@ -50,10 +50,23 @@ function parseScore(transcript: string): number | null {
   return null
 }
 
+// SpeechRecognition is not in all TS DOM libs — define locally
+interface SpeechRec extends EventTarget {
+  lang: string
+  continuous: boolean
+  interimResults: boolean
+  start(): void
+  stop(): void
+  abort(): void
+  onresult: ((e: { results: { [i: number]: { [i: number]: { transcript: string } } } }) => void) | null
+  onend: (() => void) | null
+  onerror: (() => void) | null
+}
+
 export function useSpeech() {
   const [listening, setListening] = useState(false)
   const [supported, setSupported] = useState(false)
-  const recRef = useRef<SpeechRecognition | null>(null)
+  const recRef = useRef<SpeechRec | null>(null)
   const quickScoreRef = useRef(useGameStore.getState().quickScore)
 
   useEffect(() => {
@@ -63,7 +76,7 @@ export function useSpeech() {
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const w = window as any
-    const SR: (new () => SpeechRecognition) | undefined = w.SpeechRecognition ?? w.webkitSpeechRecognition
+    const SR: (new () => SpeechRec) | undefined = w.SpeechRecognition ?? w.webkitSpeechRecognition
     if (!SR) return
     setSupported(true)
 
