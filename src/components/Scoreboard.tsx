@@ -28,7 +28,7 @@ function PlayerBoard({ idx }: { idx: 0 | 1 }) {
 
   const scoreColor = isCurrent
     ? (tag === 'finish' ? 'text-finish' : tag === 'bogey' ? 'text-bogey' : tag === 'caution' ? 'text-caution' : 'text-ink')
-    : 'text-ink-light'
+    : 'text-ink-faint'
 
   const tagColor =
     tag === 'finish' ? 'text-finish' :
@@ -37,19 +37,16 @@ function PlayerBoard({ idx }: { idx: 0 | 1 }) {
     ''
 
   return (
-    <div className={`relative flex flex-col p-4 md:p-5 transition-colors
+    <div className={`relative flex flex-col p-4 md:p-5 transition-all
       ${idx === 0 ? 'border-r border-rule' : ''}
-      ${isCurrent ? 'bg-paper' : 'bg-bg'}`}
+      ${isCurrent
+        ? 'bg-paper shadow-[inset_0_0_0_2px_#1a1a18] z-10'
+        : 'bg-bg'
+      }`}
     >
-      {/* Active accent bar */}
-      {isCurrent && (
-        <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-ink" />
-      )}
-
       {/* Name */}
-      <div className={`text-2xs tracking-[0.1em] uppercase mb-1 truncate pr-4
-        ${isCurrent ? 'text-ink-light' : 'text-ink-faint'}`}>
-        {isCurrent && <span className="mr-1.5">▶</span>}
+      <div className={`text-2xs tracking-[0.1em] uppercase mb-1 truncate pr-4 transition-colors
+        ${isCurrent ? 'text-ink' : 'text-ink-faint'}`}>
         {name}
       </div>
 
@@ -57,7 +54,7 @@ function PlayerBoard({ idx }: { idx: 0 | 1 }) {
       <div className={`font-display font-black leading-none tracking-tight transition-all
         ${isCurrent
           ? 'text-[clamp(3.5rem,10vw,5rem)]'
-          : 'text-[clamp(2rem,6vw,3rem)] opacity-40'
+          : 'text-[clamp(2rem,6vw,3rem)]'
         }
         ${scoreColor}`}>
         {score}
@@ -70,7 +67,7 @@ function PlayerBoard({ idx }: { idx: 0 | 1 }) {
       </div>
 
       {/* Stats */}
-      <div className={`mt-2 transition-opacity ${isCurrent ? '' : 'opacity-30'}`}>
+      <div className={`mt-2 transition-opacity ${isCurrent ? '' : 'opacity-25'}`}>
         {/* Mobile: compact */}
         <div className="flex gap-4 text-[11px] text-ink-light md:hidden">
           <span>avg {avg}</span>
@@ -94,7 +91,7 @@ function PlayerBoard({ idx }: { idx: 0 | 1 }) {
 
 export function Scoreboard() {
   return (
-    <div className="grid grid-cols-2 border-b-2 border-ink">
+    <div className="grid grid-cols-2 border-b border-rule">
       <PlayerBoard idx={0} />
       <PlayerBoard idx={1} />
     </div>

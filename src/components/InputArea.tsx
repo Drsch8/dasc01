@@ -8,7 +8,6 @@ export function InputArea() {
   const current = useGameStore(s => s.current)
   const score = useGameStore(s => s.scores[current])
   const outRule = useGameStore(s => s.config.outRule)
-  const toggleMode = useGameStore(s => s.toggleMode)
 
   const validation = validateInput(inputStr, inputMode, score, outRule)
   const isInvalid = inputStr !== '' && !validation.valid
@@ -39,24 +38,13 @@ export function InputArea() {
           {inputStr || '_'}
         </div>
 
-        <div className="ml-auto flex flex-col gap-1 items-end">
-          <button
-            onClick={toggleMode}
-            className={`text-[11px] px-2 py-1 border font-mono transition-colors
-              ${inputMode === 'remaining'
-                ? 'border-ink text-ink bg-ink-faint'
-                : 'border-rule text-ink-light hover:border-ink hover:text-ink'
-              }`}
-          >
-            {inputMode === 'score' ? '3-dart score' : 'Remaining'}
-          </button>
-          <span className="text-[11px] text-ink-light h-4">{remainingLabel}</span>
-        </div>
+        {/* Remaining label */}
+        <span className="ml-auto text-[11px] text-ink-light font-mono">{remainingLabel}</span>
       </div>
 
       {/* Desktop keyboard hint */}
       <p className="hidden md:block mt-2 text-2xs text-ink-light tracking-wide">
-        Type a score, press Enter — F1–F12 for quick scores
+        Type a score, press Enter — F1–F12 for quick scores · Ctrl+Z to undo
       </p>
     </div>
   )

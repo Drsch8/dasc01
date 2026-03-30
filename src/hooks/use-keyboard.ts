@@ -8,6 +8,7 @@ export function useKeyboard() {
   const deleteDigit = useGameStore(s => s.deleteDigit)
   const enterScore = useGameStore(s => s.enterScore)
   const quickScore = useGameStore(s => s.quickScore)
+  const undo = useGameStore(s => s.undo)
   const overlay = useGameStore(s => s.overlay)
   const nextLeg = useGameStore(s => s.nextLeg)
 
@@ -22,6 +23,8 @@ export function useKeyboard() {
         return
       }
 
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z') { e.preventDefault(); undo(); return }
+
       const fIdx = FKEY_LABELS.indexOf(e.key)
       if (fIdx >= 0) {
         e.preventDefault()
@@ -35,5 +38,5 @@ export function useKeyboard() {
 
     window.addEventListener('keydown', handleKey)
     return () => window.removeEventListener('keydown', handleKey)
-  }, [overlay, appendDigit, deleteDigit, enterScore, quickScore, nextLeg])
+  }, [overlay, appendDigit, deleteDigit, enterScore, quickScore, undo, nextLeg])
 }

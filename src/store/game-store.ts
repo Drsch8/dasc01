@@ -107,7 +107,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   quickScore: (value) => {
     if (value === REM_SENTINEL) {
-      get().toggleMode()
+      const state = gs(get())
+      if (!state.inputStr) {
+        get().toggleMode()
+        return
+      }
+      // Enter the typed value as remaining without permanently switching mode
+      const originalMode = state.inputMode
+      set(s => ({ ...s, inputMode: 'remaining' as const }))
+      get().enterScore()
+      set(s => ({ ...s, inputMode: originalMode }))
       return
     }
     set(s => ({ ...s, inputStr: String(value) }))
