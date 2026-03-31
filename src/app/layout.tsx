@@ -17,6 +17,7 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   title: 'Darts',
   description: '501/301 darts scorer with stats',
+  icons: { icon: '/favicon.png' },
 }
 
 export const viewport: Viewport = {
