@@ -31,3 +31,8 @@ body {
 body {
   overscroll-behavior: none;
 }
+
+/* Fill the iOS home-indicator safe area with the numpad background */
+.numpad-safe-area {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
