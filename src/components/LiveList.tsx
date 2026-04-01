@@ -14,10 +14,18 @@ export function LiveList() {
   const outRule = useGameStore(s => s.config.outRule)
   const training = useGameStore(s => s.config.training)
   const bottomRef = useRef<HTMLDivElement>(null)
+  const prevInputRef = useRef('')
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [rounds.length, current])
+
+  useEffect(() => {
+    if (inputStr !== '' && prevInputRef.current === '') {
+      bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }
+    prevInputRef.current = inputStr
+  }, [inputStr])
 
   const validation = validateInput(inputStr, inputMode, scores[current], outRule)
   const isInvalid = inputStr !== '' && !validation.valid

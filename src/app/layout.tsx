@@ -17,7 +17,10 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   title: 'Darts',
   description: '501/301 darts scorer with stats',
-  icons: { icon: '/favicon.png', apple: '/favicon.png' },
+  icons: {
+    icon: '/favicon.png',
+    apple: [{ url: '/favicon.png', sizes: '192x192', type: 'image/png' }],
+  },
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
@@ -36,7 +39,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${dmMono.variable} ${playfair.variable}`}>
-      <body className="font-mono bg-bg text-ink text-sm h-full">{children}</body>
+      <body className="font-mono bg-bg text-ink text-sm min-h-screen">{children}</body>
     </html>
   )
 }

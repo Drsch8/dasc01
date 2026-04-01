@@ -1,4 +1,5 @@
 'use client'
+import { useEffect } from 'react'
 import { useKeyboard } from '@/hooks/use-keyboard'
 import { GameHeader } from './GameHeader'
 import { Scoreboard } from './Scoreboard'
@@ -10,6 +11,15 @@ import { FinishDartPicker } from './FinishDartPicker'
 
 export function GameScreen() {
   useKeyboard()
+
+  useEffect(() => {
+    document.documentElement.style.overflow = 'hidden'
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.documentElement.style.overflow = ''
+      document.body.style.overflow = ''
+    }
+  }, [])
 
   return (
     <div className="h-dvh bg-bg flex flex-col overflow-hidden">
