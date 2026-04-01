@@ -36,7 +36,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${dmMono.variable} ${playfair.variable}`}>
-      <body className="font-mono bg-bg text-ink text-sm min-h-screen">{children}</body>
+      <body className="font-mono bg-bg text-ink text-sm h-full">{children}</body>
     </html>
   )
 }
