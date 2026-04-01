@@ -4,18 +4,27 @@ import { useGameStore } from '@/store/game-store'
 
 /** Returns which dart numbers are physically possible for this checkout score */
 function possibleDarts(checkoutScore: number, outRule: 'double' | 'single'): Set<1 | 2 | 3> {
-  const maxD1 = outRule === 'double' ? 50 : 60   // bull (D25=50) or T20=60
-  const maxD2 = outRule === 'double' ? 110 : 120  // 60+50 or 60+60
   const possible = new Set<1 | 2 | 3>()
-  if (checkoutScore <= maxD1) possible.add(1)
-  if (checkoutScore <= maxD2) possible.add(2)
+
+  if (outRule === 'double') {
+    // Dart 1: finishing dart must be a valid double (even, 2–50; bull=50 counts)
+    if (checkoutScore >= 2 && checkoutScore <= 50 && checkoutScore % 2 === 0) possible.add(1)
+    // Dart 2: dart1 scores 0–60, dart2 is a double (max 50) → max 110
+    if (checkoutScore <= 110) possible.add(2)
+  } else {
+    // Single out: any valid dart score 1–60
+    if (checkoutScore <= 60) possible.add(1)
+    if (checkoutScore <= 120) possible.add(2)
+  }
   possible.add(3)
+
   return possible
 }
 
 export function FinishDartPicker() {
   const pendingCheckout = useGameStore(s => s.pendingCheckout)
   const confirmFinishDart = useGameStore(s => s.confirmFinishDart)
+  const undo = useGameStore(s => s.undo)
   const outRule = useGameStore(s => s.config.outRule)
 
   const possible = pendingCheckout
@@ -37,7 +46,12 @@ export function FinishDartPicker() {
 
   return (
     <div className="fixed inset-0 bg-ink/85 z-50 flex items-center justify-center">
-      <div className="bg-paper border-2 border-ink p-8 text-center max-w-xs w-[90%] flex flex-col gap-6">
+      <div className="bg-paper border-2 border-ink p-8 text-center max-w-xs w-[90%] flex flex-col gap-6 relative">
+        <button
+          onClick={undo}
+          className="absolute top-3 right-3 text-ink-faint hover:text-ink font-mono text-lg leading-none"
+          aria-label="Cancel"
+        >✕</button>
         <div>
           <p className="text-xs tracking-[0.15em] uppercase text-ink-light font-mono mb-2">
             Checked out {pendingCheckout.checkoutScore}

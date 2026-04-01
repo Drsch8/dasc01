@@ -85,7 +85,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const outcome = processEnterScore({ ...state, inputMode: 'remaining' })
       if (outcome.type === 'invalid') return
       if (outcome.type === 'pending-checkout') { set({ pendingCheckout: outcome.pending }); return }
-      set({ ...outcome.state })
+      set({ ...outcome.state, inputMode: 'score' })
       return
     }
     if (value === FINISH_SENTINEL) {

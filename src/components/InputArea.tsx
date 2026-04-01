@@ -12,12 +12,6 @@ export function InputArea() {
   const validation = validateInput(inputStr, inputMode, score, outRule)
   const isInvalid = inputStr !== '' && !validation.valid
 
-  const remainingLabel = inputStr && validation.valid
-    ? inputMode === 'score'
-      ? `→ ${validation.remaining}`
-      : `scored ${validation.score}`
-    : ''
-
   return (
     <div className="px-4 py-3 bg-paper border-b border-rule">
       <div className="flex items-center gap-3">
@@ -37,9 +31,6 @@ export function InputArea() {
           ${isInvalid ? 'text-bust border-bust' : 'text-ink border-ink'}`}>
           {inputStr || '_'}
         </div>
-
-        {/* Remaining label */}
-        <span className="ml-auto text-[11px] text-ink-light font-mono">{remainingLabel}</span>
       </div>
 
       {/* Desktop keyboard hint */}

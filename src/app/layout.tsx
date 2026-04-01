@@ -18,6 +18,12 @@ export const metadata: Metadata = {
   title: 'Darts',
   description: '501/301 darts scorer with stats',
   icons: { icon: '/favicon.png' },
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'Darts',
+  },
 }
 
 export const viewport: Viewport = {
