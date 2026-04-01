@@ -13,16 +13,22 @@ export function LiveList() {
   const scores = useGameStore(s => s.scores)
   const outRule = useGameStore(s => s.config.outRule)
   const training = useGameStore(s => s.config.training)
-  const bottomRef = useRef<HTMLDivElement>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
   const prevInputRef = useRef('')
 
+  const scrollToBottom = (smooth = true) => {
+    const el = scrollRef.current
+    if (!el) return
+    el.scrollTo({ top: el.scrollHeight, behavior: smooth ? 'smooth' : 'instant' })
+  }
+
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+    scrollToBottom()
   }, [rounds.length, current])
 
   useEffect(() => {
     if (inputStr !== '' && prevInputRef.current === '') {
-      bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+      scrollToBottom()
     }
     prevInputRef.current = inputStr
   }, [inputStr])
@@ -68,7 +74,7 @@ export function LiveList() {
   const innerW = training ? 'w-[260px]' : 'w-full'
 
   return (
-    <div className="flex-1 min-h-0 overflow-y-auto flex flex-col">
+    <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto flex flex-col">
 
       {/* ── Sticky header ── */}
       <div className="sticky top-0 z-10 bg-bg shrink-0 flex justify-center">
@@ -153,7 +159,6 @@ export function LiveList() {
       </div>
       </div>
 
-      <div ref={bottomRef} />
     </div>
   )
 }
