@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   description: '501/301 darts scorer with stats',
   icons: {
     icon: '/favicon.png',
-    apple: [{ url: '/favicon.png', sizes: '192x192', type: 'image/png' }],
+    apple: '/apple-touch-icon.png',
   },
   manifest: '/manifest.json',
   appleWebApp: {
