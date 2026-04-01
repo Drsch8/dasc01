@@ -30,4 +30,6 @@ body {
 /* Prevent pull-to-refresh on iOS */
 body {
   overscroll-behavior: none;
+  /* Push content above the home indicator in standalone PWA mode */
+  padding-bottom: env(safe-area-inset-bottom);
 }
