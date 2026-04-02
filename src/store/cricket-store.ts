@@ -8,7 +8,7 @@ interface CricketStore extends CricketSnapshot {
   history: CricketSnapshot[]
 
   startGame: (config: CricketConfig) => void
-  addMark: (num: number) => void
+  addMark: (num: number, multiplier?: 1 | 2 | 3) => void
   endTurn: () => void
   undo: () => void
   newGame: () => void
@@ -57,24 +57,28 @@ export const useCricketStore = create<CricketStore>((set, get) => ({
     })
   },
 
-  addMark: (num) => {
+  addMark: (num, multiplier = 1) => {
     const s = get()
     if (s.winner !== null || s.dartsThisRound >= 3) return
     const opp: 0 | 1 = s.current === 0 ? 1 : 0
 
-    const cur = s.marks[num][s.current]
-    const opp_ = s.marks[num][opp]
+    let curMarks = s.marks[num][s.current]
+    const oppMarks = s.marks[num][opp]
+    const newScores: [number, number] = [s.scores[0], s.scores[1]]
+    const pointValue = num === 25 ? 25 : num
+
+    // Apply multiplier marks one at a time so scoring logic is correct
+    for (let i = 0; i < multiplier; i++) {
+      if (curMarks >= 3 && oppMarks < 3) {
+        newScores[s.current] += pointValue
+      }
+      curMarks++
+    }
 
     const newPair: [number, number] = s.current === 0
-      ? [cur + 1, s.marks[num][1]]
-      : [s.marks[num][0], cur + 1]
+      ? [curMarks, s.marks[num][1]]
+      : [s.marks[num][0], curMarks]
     const newMarks = { ...s.marks, [num]: newPair }
-
-    const newScores: [number, number] = [s.scores[0], s.scores[1]]
-    // Score when already closed (≥3) and opponent not closed
-    if (cur >= 3 && opp_ < 3) {
-      newScores[s.current] += num === 25 ? 25 : num
-    }
 
     const newDarts = s.dartsThisRound + 1
     const winner = checkWinner(s.config.numbers, newMarks, newScores)

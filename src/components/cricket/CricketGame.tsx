@@ -3,10 +3,11 @@ import { useEffect, useState } from 'react'
 import { useCricketStore } from '@/store/cricket-store'
 
 function Marks({ count }: { count: number }) {
-  if (count === 0) return <span className="text-rule font-mono text-xl select-none">—</span>
-  if (count === 1) return <span className="text-ink font-display font-black text-4xl leading-none select-none">/</span>
-  if (count === 2) return <span className="text-ink font-display font-black text-4xl leading-none select-none">✕</span>
-  return <span className="text-finish font-display font-black text-4xl leading-none select-none">⊗</span>
+  const base = 'font-mono text-3xl leading-none select-none'
+  if (count === 0) return <span className={`${base} text-rule`}>–</span>
+  if (count === 1) return <span className={`${base} text-ink`}>|</span>
+  if (count === 2) return <span className={`${base} text-ink`}>||</span>
+  return <span className={`${base} text-finish`}>|||</span>
 }
 
 export function CricketGame() {
@@ -21,6 +22,7 @@ export function CricketGame() {
   const undo           = useCricketStore(s => s.undo)
   const newGame        = useCricketStore(s => s.newGame)
   const [confirmNew, setConfirmNew] = useState(false)
+  const [multiplier, setMultiplier] = useState<1 | 2 | 3>(1)
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -92,6 +94,24 @@ export function CricketGame() {
         </div>
       </div>
 
+      {/* ── Multiplier row ── */}
+      {winner === null && (
+        <div className="shrink-0 border-b border-rule bg-bg flex justify-center gap-0">
+          {([1, 2, 3] as const).map(m => (
+            <button
+              key={m}
+              onClick={() => setMultiplier(m)}
+              disabled={outOfDarts}
+              className={`flex-1 py-2 font-mono text-sm tracking-widest border-none cursor-pointer transition-colors
+                ${multiplier === m ? 'bg-ink text-bg' : 'bg-transparent text-ink-light hover:text-ink'}
+                ${m < 3 ? 'border-r border-rule' : ''}`}
+            >
+              ×{m}
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* ── Number grid ── */}
       <div className="flex-1 min-h-0 overflow-y-auto bg-paper md:flex md:justify-center">
         <div className="w-full md:max-w-2xl md:border-x md:border-rule">
@@ -103,7 +123,7 @@ export function CricketGame() {
             return (
               <button
                 key={n}
-                onClick={() => addMark(n)}
+                onClick={() => { addMark(n, multiplier); setMultiplier(1) }}
                 disabled={outOfDarts || winner !== null}
                 onTouchEnd={e => (e.currentTarget as HTMLElement).blur()}
                 className={`w-full grid border-b border-rule transition-colors
@@ -113,7 +133,7 @@ export function CricketGame() {
                 style={{ gridTemplateColumns: '1fr 5rem 1fr' }}
               >
                 {/* P1 marks */}
-                <div className={`flex items-center justify-start px-6 py-4 border-r border-rule
+                <div className={`flex items-center justify-center px-4 py-4 border-r border-rule
                   ${active(0) && !fullyClosed ? 'bg-paper' : 'bg-bg/50'}`}
                 >
                   <Marks count={p1m} />
@@ -127,7 +147,7 @@ export function CricketGame() {
                 </div>
 
                 {/* P2 marks */}
-                <div className={`flex items-center justify-end px-6 py-4 border-l border-rule
+                <div className={`flex items-center justify-center px-4 py-4 border-l border-rule
                   ${active(1) && !fullyClosed ? 'bg-paper' : 'bg-bg/50'}`}
                 >
                   <Marks count={p2m} />
@@ -142,7 +162,7 @@ export function CricketGame() {
       {winner === null && (
         <div className="shrink-0 border-t border-rule">
           <button
-            onClick={endTurn}
+            onClick={() => { endTurn(); setMultiplier(1) }}
             className="w-full py-4 bg-paper font-mono text-sm tracking-widest text-ink hover:bg-bg transition-colors cursor-pointer border-none"
           >
             END TURN
