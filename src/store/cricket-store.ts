@@ -59,7 +59,7 @@ export const useCricketStore = create<CricketStore>((set, get) => ({
 
   addMark: (num, multiplier = 1) => {
     const s = get()
-    if (s.winner !== null || s.dartsThisRound >= 3) return
+    if (s.winner !== null) return
     const opp: 0 | 1 = s.current === 0 ? 1 : 0
 
     let curMarks = s.marks[num][s.current]

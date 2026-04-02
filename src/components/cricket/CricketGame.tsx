@@ -3,11 +3,10 @@ import { useEffect, useState } from 'react'
 import { useCricketStore } from '@/store/cricket-store'
 
 function Marks({ count }: { count: number }) {
-  const base = 'font-mono text-3xl leading-none select-none'
-  if (count === 0) return <span className={`${base} text-rule`}>–</span>
-  if (count === 1) return <span className={`${base} text-ink`}>|</span>
-  if (count === 2) return <span className={`${base} text-ink`}>||</span>
-  return <span className={`${base} text-finish`}>|||</span>
+  if (count === 0) return null
+  const src = count === 1 ? '/1.svg' : count === 2 ? '/2.svg' : '/3.svg'
+  const height = count >= 3 ? 32 : 44
+  return <img src={src} style={{ height }} className="w-auto select-none" aria-hidden alt="" />
 }
 
 export function CricketGame() {
@@ -15,14 +14,12 @@ export function CricketGame() {
   const marks          = useCricketStore(s => s.marks)
   const scores         = useCricketStore(s => s.scores)
   const current        = useCricketStore(s => s.current)
-  const dartsThisRound = useCricketStore(s => s.dartsThisRound)
   const winner         = useCricketStore(s => s.winner)
   const addMark        = useCricketStore(s => s.addMark)
   const endTurn        = useCricketStore(s => s.endTurn)
   const undo           = useCricketStore(s => s.undo)
   const newGame        = useCricketStore(s => s.newGame)
   const [confirmNew, setConfirmNew] = useState(false)
-  const [multiplier, setMultiplier] = useState<1 | 2 | 3>(1)
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -34,10 +31,9 @@ export function CricketGame() {
     }
   }, [])
 
-  const numbers    = config.numbers
-  const outOfDarts = dartsThisRound >= 3
-  const name       = (p: 0 | 1) => p === 0 ? config.p1 : config.p2
-  const active     = (p: 0 | 1) => current === p && winner === null
+  const numbers = config.numbers
+  const name    = (p: 0 | 1) => p === 0 ? config.p1 : config.p2
+  const active  = (p: 0 | 1) => current === p && winner === null
 
   const hdrBtn = 'border border-rule px-4 py-2 text-sm text-ink-light font-mono hover:border-ink hover:text-ink transition-colors cursor-pointer bg-transparent'
 
@@ -77,40 +73,11 @@ export function CricketGame() {
                   {scores[p]}
                 </div>
 
-                {/* Dart dots — shown only for active player */}
-                <div className="flex gap-1.5 mt-2 h-3">
-                  {active(p) && [0, 1, 2].map(i => (
-                    <span
-                      key={i}
-                      className={`w-2 h-2 rounded-full border transition-colors ${
-                        i < dartsThisRound ? 'bg-ink border-ink' : 'bg-transparent border-ink-faint'
-                      }`}
-                    />
-                  ))}
-                </div>
               </div>
             ))}
           </div>
         </div>
       </div>
-
-      {/* ── Multiplier row ── */}
-      {winner === null && (
-        <div className="shrink-0 border-b border-rule bg-bg flex justify-center gap-0">
-          {([1, 2, 3] as const).map(m => (
-            <button
-              key={m}
-              onClick={() => setMultiplier(m)}
-              disabled={outOfDarts}
-              className={`flex-1 py-2 font-mono text-sm tracking-widest border-none cursor-pointer transition-colors
-                ${multiplier === m ? 'bg-ink text-bg' : 'bg-transparent text-ink-light hover:text-ink'}
-                ${m < 3 ? 'border-r border-rule' : ''}`}
-            >
-              ×{m}
-            </button>
-          ))}
-        </div>
-      )}
 
       {/* ── Number grid ── */}
       <div className="flex-1 min-h-0 overflow-y-auto bg-paper md:flex md:justify-center">
@@ -123,24 +90,25 @@ export function CricketGame() {
             return (
               <button
                 key={n}
-                onClick={() => { addMark(n, multiplier); setMultiplier(1) }}
-                disabled={outOfDarts || winner !== null}
+                onClick={() => addMark(n)}
+                disabled={winner !== null}
                 onTouchEnd={e => (e.currentTarget as HTMLElement).blur()}
-                className={`w-full grid border-b border-rule transition-colors
-                  ${fullyClosed ? 'opacity-25' : ''}
-                  ${!outOfDarts && winner === null ? 'active:bg-bg cursor-pointer' : 'cursor-default'}
+                className={`w-full grid border-b border-rule
+                  ${winner === null ? 'cursor-pointer' : 'cursor-default'}
                 `}
                 style={{ gridTemplateColumns: '1fr 5rem 1fr' }}
               >
                 {/* P1 marks */}
                 <div className={`flex items-center justify-center px-4 py-4 border-r border-rule
-                  ${active(0) && !fullyClosed ? 'bg-paper' : 'bg-bg/50'}`}
+                  ${active(0) && !fullyClosed ? 'bg-paper' : 'bg-bg'}`}
                 >
-                  <Marks count={p1m} />
+                  <div className={fullyClosed ? 'opacity-25' : ''}>
+                    <Marks count={p1m} />
+                  </div>
                 </div>
 
                 {/* Number */}
-                <div className="flex items-center justify-center py-4">
+                <div className="flex items-center justify-center py-4 bg-paper active:bg-ink/10 transition-colors">
                   <span className={`font-display font-black text-2xl ${fullyClosed ? 'text-ink-faint' : 'text-ink'}`}>
                     {label}
                   </span>
@@ -148,9 +116,11 @@ export function CricketGame() {
 
                 {/* P2 marks */}
                 <div className={`flex items-center justify-center px-4 py-4 border-l border-rule
-                  ${active(1) && !fullyClosed ? 'bg-paper' : 'bg-bg/50'}`}
+                  ${active(1) && !fullyClosed ? 'bg-paper' : 'bg-bg'}`}
                 >
-                  <Marks count={p2m} />
+                  <div className={fullyClosed ? 'opacity-25' : ''}>
+                    <Marks count={p2m} />
+                  </div>
                 </div>
               </button>
             )
@@ -162,7 +132,7 @@ export function CricketGame() {
       {winner === null && (
         <div className="shrink-0 border-t border-rule">
           <button
-            onClick={() => { endTurn(); setMultiplier(1) }}
+            onClick={endTurn}
             className="w-full py-4 bg-paper font-mono text-sm tracking-widest text-ink hover:bg-bg transition-colors cursor-pointer border-none"
           >
             END TURN
