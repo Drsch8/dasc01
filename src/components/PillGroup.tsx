@@ -21,7 +21,7 @@ export function PillGroup<T extends string | number>({ options, value, onChange 
           className={`px-4 py-1.5 border text-[13px] transition-colors cursor-pointer font-mono
             ${value === opt.value
               ? 'bg-ink text-bg border-ink'
-              : 'bg-bg text-ink border-rule hover:border-ink'
+              : 'bg-bg text-ink border-rule active:border-ink'
             }`}
         >
           {opt.label}

@@ -52,7 +52,7 @@ export function CricketGame() {
   const name    = (p: 0 | 1) => p === 0 ? config.p1 : config.p2
   const active  = (p: 0 | 1) => current === p && winner === null
 
-  const hdrBtn = 'border border-rule px-4 py-2 text-sm text-ink-light font-mono hover:border-ink hover:text-ink transition-colors cursor-pointer bg-transparent'
+  const hdrBtn = 'border border-rule px-4 py-2 text-sm text-ink-light font-mono active:border-ink active:text-ink transition-colors cursor-pointer bg-transparent'
 
   return (
     <div className="h-dvh bg-bg flex flex-col overflow-hidden">
@@ -154,7 +154,7 @@ export function CricketGame() {
         <div className="shrink-0 bg-bg md:flex md:justify-center">
           <button
             onClick={endTurn}
-            className="w-full md:max-w-2xl py-4 bg-ink text-bg font-mono text-sm tracking-widest hover:opacity-80 transition-opacity cursor-pointer border-none"
+            className="w-full md:max-w-2xl py-4 bg-ink text-bg font-mono text-sm tracking-widest active:opacity-80 transition-opacity cursor-pointer border-none"
           >
             END TURN
           </button>
@@ -180,20 +180,20 @@ export function CricketGame() {
             <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={() => useCricketStore.getState().startGame(config)}
-                className="py-4 border-2 border-ink bg-ink text-bg hover:opacity-80 font-mono text-sm tracking-wide transition-opacity cursor-pointer"
+                className="py-4 border-2 border-ink bg-ink text-bg active:opacity-80 font-mono text-sm tracking-wide transition-opacity cursor-pointer"
               >
                 Rematch
               </button>
               <button
                 onClick={newGame}
-                className="py-4 border-2 border-rule hover:border-ink font-mono text-sm tracking-wide transition-colors cursor-pointer bg-transparent"
+                className="py-4 border-2 border-rule active:border-ink font-mono text-sm tracking-wide transition-colors cursor-pointer bg-transparent"
               >
                 New game
               </button>
             </div>
             <button
               onClick={undo}
-              className="font-mono text-xs tracking-[0.1em] uppercase text-ink-faint hover:text-ink transition-colors cursor-pointer bg-transparent border-none"
+              className="font-mono text-xs tracking-[0.1em] uppercase text-ink-faint active:text-ink transition-colors cursor-pointer bg-transparent border-none"
             >
               ← Undo
             </button>
@@ -205,11 +205,11 @@ export function CricketGame() {
       {confirmNew && (
         <div className="fixed inset-0 bg-bg/60 backdrop-blur-sm z-50 flex items-center justify-center" onClick={() => setConfirmNew(false)}>
           <div className="bg-paper border-2 border-ink p-8 text-center max-w-xs w-[90%] flex flex-col gap-6 relative" onClick={e => e.stopPropagation()}>
-            <button onClick={() => setConfirmNew(false)} className="absolute top-3 right-3 text-ink-faint hover:text-ink font-mono text-lg leading-none">✕</button>
+            <button onClick={() => setConfirmNew(false)} className="absolute top-3 right-3 text-ink-faint active:text-ink font-mono text-lg leading-none">✕</button>
             <p className="font-display font-black text-3xl">New game?</p>
             <div className="grid grid-cols-2 gap-3">
-              <button onClick={() => setConfirmNew(false)} className="py-5 border-2 border-rule hover:border-ink hover:bg-bg font-mono text-2xl transition-colors cursor-pointer">No</button>
-              <button onClick={() => { setConfirmNew(false); newGame() }} className="py-5 border-2 border-ink bg-ink text-bg hover:opacity-80 font-mono text-2xl transition-opacity cursor-pointer">Yes</button>
+              <button onClick={() => setConfirmNew(false)} className="py-5 border-2 border-rule active:border-ink active:bg-bg font-mono text-2xl transition-colors cursor-pointer">No</button>
+              <button onClick={() => { setConfirmNew(false); newGame() }} className="py-5 border-2 border-ink bg-ink text-bg active:opacity-80 font-mono text-2xl transition-opacity cursor-pointer">Yes</button>
             </div>
           </div>
         </div>

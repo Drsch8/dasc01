@@ -23,7 +23,7 @@ export function StatsScreen() {
           {!matchFinished && (
             <button
               onClick={() => setScreen('game')}
-              className="border border-rule px-4 py-2 text-sm text-ink-light font-mono hover:border-ink hover:text-ink transition-colors"
+              className="border border-rule px-4 py-2 text-sm text-ink-light font-mono active:border-ink active:text-ink transition-colors"
             >
               ← Back
             </button>
@@ -31,14 +31,14 @@ export function StatsScreen() {
           {matchFinished && (
             <button
               onClick={() => startGame(config)}
-              className="border border-rule px-4 py-2 text-sm text-ink-light font-mono hover:border-ink hover:text-ink transition-colors"
+              className="border border-rule px-4 py-2 text-sm text-ink-light font-mono active:border-ink active:text-ink transition-colors"
             >
               Rematch
             </button>
           )}
           <button
             onClick={() => setConfirmNew(true)}
-            className="border border-rule px-4 py-2 text-sm text-ink-light font-mono hover:border-ink hover:text-ink transition-colors"
+            className="border border-rule px-4 py-2 text-sm text-ink-light font-mono active:border-ink active:text-ink transition-colors"
           >
             New game
           </button>
@@ -85,11 +85,11 @@ export function StatsScreen() {
       {confirmNew && (
         <div className="fixed inset-0 bg-bg/60 backdrop-blur-sm z-50 flex items-center justify-center" onClick={() => setConfirmNew(false)}>
           <div className="bg-paper border-2 border-ink p-8 text-center max-w-xs w-[90%] flex flex-col gap-6 relative" onClick={e => e.stopPropagation()}>
-            <button onClick={() => setConfirmNew(false)} className="absolute top-3 right-3 text-ink-faint hover:text-ink font-mono text-lg leading-none" aria-label="Cancel">✕</button>
+            <button onClick={() => setConfirmNew(false)} className="absolute top-3 right-3 text-ink-faint active:text-ink font-mono text-lg leading-none" aria-label="Cancel">✕</button>
             <p className="font-display font-black text-3xl">New game?</p>
             <div className="grid grid-cols-2 gap-3">
-              <button onClick={() => setConfirmNew(false)} className="py-5 border-2 border-rule hover:border-ink hover:bg-bg font-mono text-2xl transition-colors cursor-pointer">No</button>
-              <button onClick={() => { setConfirmNew(false); setScreen('setup') }} className="py-5 border-2 border-ink bg-ink text-bg hover:opacity-80 font-mono text-2xl transition-opacity cursor-pointer">Yes</button>
+              <button onClick={() => setConfirmNew(false)} className="py-5 border-2 border-rule active:border-ink active:bg-bg font-mono text-2xl transition-colors cursor-pointer">No</button>
+              <button onClick={() => { setConfirmNew(false); setScreen('setup') }} className="py-5 border-2 border-ink bg-ink text-bg active:opacity-80 font-mono text-2xl transition-opacity cursor-pointer">Yes</button>
             </div>
           </div>
         </div>

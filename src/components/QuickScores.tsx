@@ -15,8 +15,8 @@ export function QuickScores() {
       {QUICK_SCORE_VALUES.map((val, i) => {
         const isFinish = val === FINISH_SENTINEL
 
-        let cls = 'bg-paper text-ink hover:bg-bg active:bg-ink-faint'
-        if (isFinish && canFinish) cls = 'bg-finish-bg text-finish hover:bg-finish/10'
+        let cls = 'bg-paper text-ink active:bg-ink-faint'
+        if (isFinish && canFinish) cls = 'bg-finish-bg text-finish active:bg-finish/10'
         else if (isFinish) cls = 'bg-paper text-ink-faint'
 
         return (

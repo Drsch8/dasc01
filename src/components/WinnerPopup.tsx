@@ -23,8 +23,8 @@ export function WinnerPopup() {
 
   if (!winnerName) return null
 
-  const btnGhost = 'py-4 border-2 border-rule hover:border-ink hover:bg-bg font-mono text-sm tracking-wide transition-colors cursor-pointer bg-transparent'
-  const btnFill  = 'py-4 border-2 border-ink bg-ink text-bg hover:opacity-80 font-mono text-sm tracking-wide transition-opacity cursor-pointer'
+  const btnGhost = 'py-4 border-2 border-rule active:border-ink active:bg-bg font-mono text-sm tracking-wide transition-colors cursor-pointer bg-transparent'
+  const btnFill  = 'py-4 border-2 border-ink bg-ink text-bg active:opacity-80 font-mono text-sm tracking-wide transition-opacity cursor-pointer'
 
   return (
     <div
@@ -68,13 +68,13 @@ export function WinnerPopup() {
         <div className="flex items-center justify-between">
           <button
             onClick={undoWinner}
-            className="font-mono text-xs tracking-[0.1em] uppercase text-ink-faint hover:text-ink transition-colors cursor-pointer bg-transparent border-none"
+            className="font-mono text-xs tracking-[0.1em] uppercase text-ink-faint active:text-ink transition-colors cursor-pointer bg-transparent border-none"
           >
             ← Undo
           </button>
           <button
             onClick={dismissWinner}
-            className="font-mono text-xs tracking-[0.1em] uppercase text-ink-faint hover:text-ink transition-colors cursor-pointer bg-transparent border-none"
+            className="font-mono text-xs tracking-[0.1em] uppercase text-ink-faint active:text-ink transition-colors cursor-pointer bg-transparent border-none"
           >
             Stats →
           </button>

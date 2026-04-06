@@ -75,7 +75,7 @@ export default async function LeaderboardPage() {
         <h1 className="font-display font-black text-2xl tracking-tight">Leaderboard</h1>
         <Link
           href="/"
-          className="border border-rule px-4 py-2 text-sm text-ink-light font-mono hover:border-ink hover:text-ink transition-colors"
+          className="border border-rule px-4 py-2 text-sm text-ink-light font-mono active:border-ink active:text-ink transition-colors"
         >
           ← Back
         </Link>

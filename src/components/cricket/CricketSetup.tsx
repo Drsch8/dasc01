@@ -46,7 +46,7 @@ function HelpOverlay({ onClose }: { onClose: () => void }) {
             <span className="font-display font-bold text-2xl">How to play Cricket</span>
             <button
               onClick={onClose}
-              className="font-mono text-sm text-ink-light hover:text-ink px-3 py-1.5 border border-rule hover:border-ink transition-colors"
+              className="font-mono text-sm text-ink-light active:text-ink px-3 py-1.5 border border-rule active:border-ink transition-colors"
             >
               ✕ Close
             </button>
@@ -70,7 +70,7 @@ function HelpOverlay({ onClose }: { onClose: () => void }) {
 
           <button
             onClick={onClose}
-            className="w-full border border-rule py-3 font-mono text-sm text-ink-light hover:border-ink hover:text-ink transition-colors"
+            className="w-full border border-rule py-3 font-mono text-sm text-ink-light active:border-ink active:text-ink transition-colors"
           >
             Got it
           </button>
@@ -115,7 +115,7 @@ export function CricketSetup() {
         <div className="flex items-end gap-5">
           <Link
             href="/"
-            className="font-display font-black text-[clamp(3rem,8vw,5rem)] leading-[0.9] tracking-tight text-ink-faint hover:text-ink transition-colors"
+            className="font-display font-black text-[clamp(3rem,8vw,5rem)] leading-[0.9] tracking-tight text-ink-faint active:text-ink transition-colors"
           >
             Darts
           </Link>
@@ -125,7 +125,7 @@ export function CricketSetup() {
         </div>
         <button
           onClick={() => setShowHelp(true)}
-          className="font-mono text-sm text-ink-light hover:text-ink border border-rule hover:border-ink px-3 py-1.5 transition-colors mb-1"
+          className="font-mono text-sm text-ink-light active:text-ink border border-rule active:border-ink px-3 py-1.5 transition-colors mb-1"
         >
           ?
         </button>
@@ -169,7 +169,7 @@ export function CricketSetup() {
                       className={`px-4 py-2 font-mono text-sm border transition-colors cursor-pointer
                         ${active
                           ? 'border-ink bg-ink text-bg'
-                          : 'border-rule bg-bg text-ink-light hover:border-ink hover:text-ink'
+                          : 'border-rule bg-bg text-ink-light active:border-ink active:text-ink'
                         }`}
                     >
                       {n === 25 ? 'Bull' : n}
@@ -184,7 +184,7 @@ export function CricketSetup() {
         <button
           onClick={handleStart}
           disabled={numbers.length === 0}
-          className="bg-ink text-bg py-3 font-mono text-sm tracking-[0.06em] hover:opacity-80 transition-opacity w-full disabled:opacity-30"
+          className="bg-ink text-bg py-3 font-mono text-sm tracking-[0.06em] active:opacity-80 transition-opacity w-full disabled:opacity-30"
         >
           Start Game
         </button>

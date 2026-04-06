@@ -49,7 +49,7 @@ export function GameHeader() {
     return () => document.removeEventListener('mousedown', handler)
   }, [menuOpen])
 
-  const hdrBtn = 'border border-rule px-4 py-2 text-sm text-ink-light font-mono hover:border-ink hover:text-ink transition-colors cursor-pointer bg-transparent'
+  const hdrBtn = 'border border-rule px-4 py-2 text-sm text-ink-light font-mono active:border-ink active:text-ink transition-colors cursor-pointer bg-transparent'
 
   const voiceBtn = supported ? (
     <button
@@ -57,7 +57,7 @@ export function GameHeader() {
       title={muted ? 'Unmute voice' : 'Mute voice'}
       className={`border px-4 py-2 text-sm font-mono transition-colors cursor-pointer bg-transparent ${
         muted
-          ? 'border-rule text-ink-faint hover:border-ink hover:text-ink'
+          ? 'border-rule text-ink-faint active:border-ink active:text-ink'
           : 'border-finish text-finish'
       }`}
     >
@@ -74,20 +74,20 @@ export function GameHeader() {
           <div className="bg-paper border-2 border-ink p-8 text-center max-w-xs w-[90%] flex flex-col gap-6 relative" onClick={e => e.stopPropagation()}>
             <button
               onClick={() => setConfirmNew(false)}
-              className="absolute top-3 right-3 text-ink-faint hover:text-ink font-mono text-lg leading-none"
+              className="absolute top-3 right-3 text-ink-faint active:text-ink font-mono text-lg leading-none"
               aria-label="Cancel"
             >✕</button>
             <p className="font-display font-black text-3xl">New game?</p>
             <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={() => setConfirmNew(false)}
-                className="py-5 border-2 border-rule hover:border-ink hover:bg-bg font-mono text-2xl transition-colors cursor-pointer"
+                className="py-5 border-2 border-rule active:border-ink active:bg-bg font-mono text-2xl transition-colors cursor-pointer"
               >
                 No
               </button>
               <button
                 onClick={confirmYes}
-                className="py-5 border-2 border-ink bg-ink text-bg hover:opacity-80 font-mono text-2xl transition-opacity cursor-pointer"
+                className="py-5 border-2 border-ink bg-ink text-bg active:opacity-80 font-mono text-2xl transition-opacity cursor-pointer"
               >
                 Yes
               </button>
@@ -121,19 +121,19 @@ export function GameHeader() {
           <div className="absolute top-full right-0 mt-px bg-paper border border-rule shadow-lg z-30 flex flex-col min-w-36">
             <Link
               href="/leaderboard"
-              className="px-5 py-3 text-sm font-mono text-ink-light hover:bg-bg hover:text-ink transition-colors"
+              className="px-5 py-3 text-sm font-mono text-ink-light active:bg-bg active:text-ink transition-colors"
               onClick={() => setMenuOpen(false)}
             >
               Board
             </Link>
             <button
-              className="px-5 py-3 text-sm font-mono text-ink-light hover:bg-bg hover:text-ink transition-colors text-left"
+              className="px-5 py-3 text-sm font-mono text-ink-light active:bg-bg active:text-ink transition-colors text-left"
               onClick={() => { setScreen('stats'); setMenuOpen(false) }}
             >
               Stats
             </button>
             <button
-              className="px-5 py-3 text-sm font-mono text-ink-light hover:bg-bg hover:text-ink transition-colors text-left"
+              className="px-5 py-3 text-sm font-mono text-ink-light active:bg-bg active:text-ink transition-colors text-left"
               onClick={handleNewGame}
             >
               New game

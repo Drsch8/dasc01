@@ -52,7 +52,7 @@ export function PlayerNameInput({ label, value, onChange, inputClassName, onEnte
             <button
               key={name}
               type="button"
-              className="w-full text-left px-3 py-1.5 font-mono text-sm text-ink hover:bg-bg transition-colors"
+              className="w-full text-left px-3 py-1.5 font-mono text-sm text-ink active:bg-bg transition-colors"
               onMouseDown={() => { onChange(name); setOpen(false) }}
             >
               {name}

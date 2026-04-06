@@ -64,7 +64,7 @@ export function FinishDartPicker() {
                 disabled={!enabled}
                 className={`py-5 border-2 font-mono text-2xl transition-colors
                   ${enabled
-                    ? 'border-rule hover:border-ink hover:bg-bg active:bg-ink-faint cursor-pointer'
+                    ? 'border-rule active:border-ink active:bg-ink-faint cursor-pointer'
                     : 'border-rule/30 text-ink-faint cursor-not-allowed'
                   }`}
               >
@@ -77,7 +77,7 @@ export function FinishDartPicker() {
         <div className="flex items-center justify-between">
           <button
             onClick={undo}
-            className="font-mono text-xs tracking-[0.1em] uppercase text-ink-faint hover:text-ink transition-colors cursor-pointer bg-transparent border-none"
+            className="font-mono text-xs tracking-[0.1em] uppercase text-ink-faint active:text-ink transition-colors cursor-pointer bg-transparent border-none"
           >
             ← Undo
           </button>
