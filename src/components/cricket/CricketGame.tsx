@@ -116,7 +116,7 @@ export function CricketGame() {
                 style={{ gridTemplateColumns: '1fr 5rem 1fr' }}
               >
                 {/* Flash overlay */}
-                <div className="absolute inset-0 group-active:bg-ink/10 transition-colors duration-75 pointer-events-none" />
+                <div className="absolute inset-0 group-active:bg-ink/20 pointer-events-none" />
 
                 {/* P1 marks */}
                 <div

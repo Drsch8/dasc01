@@ -157,7 +157,7 @@ export function CricketSetup() {
 
         <div>
           <label className={fieldLabel}>Numbers in play</label>
-          <div className="flex gap-2 w-fit">
+          <div className="flex gap-2 w-fit mx-auto">
             {([[20, 19, 18, 17, 16, 15], [14, 13, 12, 11, 25]] as const).map((col, ci) => (
               <div key={ci} className="flex flex-col gap-2">
                 {col.map(n => {
