@@ -110,11 +110,14 @@ export function CricketGame() {
                 onClick={() => addMark(n)}
                 disabled={winner !== null}
                 onTouchEnd={e => (e.currentTarget as HTMLElement).blur()}
-                className={`flex-1 grid border-b border-rule
+                className={`group relative flex-1 grid border-b border-rule
                   ${winner === null ? 'cursor-pointer' : 'cursor-default'}
                 `}
                 style={{ gridTemplateColumns: '1fr 5rem 1fr' }}
               >
+                {/* Flash overlay */}
+                <div className="absolute inset-0 group-active:bg-ink/10 transition-colors duration-75 pointer-events-none" />
+
                 {/* P1 marks */}
                 <div
                   className={`flex items-center justify-center px-4 border-r border-rule
@@ -127,7 +130,7 @@ export function CricketGame() {
                 </div>
 
                 {/* Number */}
-                <div className="flex items-center justify-center bg-paper active:bg-ink/10 transition-colors">
+                <div className="flex items-center justify-center bg-paper">
                   <span className={`font-display font-black text-2xl ${fullyClosed ? 'text-ink-faint' : 'text-ink'}`}>
                     {label}
                   </span>

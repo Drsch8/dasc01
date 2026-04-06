@@ -157,23 +157,27 @@ export function CricketSetup() {
 
         <div>
           <label className={fieldLabel}>Numbers in play</label>
-          <div className="flex flex-wrap gap-2">
-            {([20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 25] as const).map(n => {
-              const isActive = numbers.includes(n)
-              return (
-                <button
-                  key={n}
-                  onClick={() => toggleNumber(n)}
-                  className={`px-4 py-2 font-mono text-sm border transition-colors active:scale-[0.97] transition-transform duration-100 cursor-pointer
-                    ${isActive
-                      ? 'border-ink bg-ink text-bg'
-                      : 'border-rule bg-bg text-ink-light active:border-ink active:text-ink'
-                    }`}
-                >
-                  {n === 25 ? 'Bull' : n}
-                </button>
-              )
-            })}
+          <div className="flex gap-2 w-fit">
+            {([[20, 19, 18, 17, 16, 15], [14, 13, 12, 11, 25]] as const).map((col, ci) => (
+              <div key={ci} className="flex flex-col gap-2">
+                {col.map(n => {
+                  const isActive = numbers.includes(n)
+                  return (
+                    <button
+                      key={n}
+                      onClick={() => toggleNumber(n)}
+                      className={`px-4 py-2 font-mono text-sm border transition-colors active:scale-[0.97] transition-transform duration-100 cursor-pointer
+                        ${isActive
+                          ? 'border-ink bg-ink text-bg'
+                          : 'border-rule bg-bg text-ink-light active:border-ink active:text-ink'
+                        }`}
+                    >
+                      {n === 25 ? 'Bull' : n}
+                    </button>
+                  )
+                })}
+              </div>
+            ))}
           </div>
         </div>
 
