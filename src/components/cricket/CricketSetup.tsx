@@ -110,8 +110,8 @@ export function CricketSetup() {
   const fieldLabel = 'block text-2xs tracking-[0.12em] uppercase text-ink-light mb-2'
 
   return (
-    <div className="min-h-dvh bg-bg px-4 pt-10 pb-6 md:p-12">
-      <div className="flex items-end justify-between mb-10 md:mb-12">
+    <div className="h-dvh overflow-y-auto bg-bg px-4 pt-8 pb-6 md:p-12">
+      <div className="flex items-end justify-between mb-6 md:mb-12">
         <div className="flex items-end gap-5">
           <Link
             href="/"
