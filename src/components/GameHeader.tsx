@@ -49,7 +49,7 @@ export function GameHeader() {
     return () => document.removeEventListener('mousedown', handler)
   }, [menuOpen])
 
-  const hdrBtn = 'border border-rule px-4 py-2 text-sm text-ink-light font-mono active:border-ink active:text-ink transition-colors cursor-pointer bg-transparent'
+  const hdrBtn = 'border border-rule px-4 py-2 text-sm text-ink-light font-mono active:border-ink active:text-ink active:scale-[0.97] transition-all duration-100 cursor-pointer bg-transparent'
 
   const voiceBtn = supported ? (
     <button
@@ -81,13 +81,13 @@ export function GameHeader() {
             <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={() => setConfirmNew(false)}
-                className="py-5 border-2 border-rule active:border-ink active:bg-bg font-mono text-2xl transition-colors cursor-pointer"
+                className="py-5 border-2 border-rule active:border-ink active:bg-bg active:scale-[0.97] font-mono text-2xl transition-all duration-100 cursor-pointer"
               >
                 No
               </button>
               <button
                 onClick={confirmYes}
-                className="py-5 border-2 border-ink bg-ink text-bg active:opacity-80 font-mono text-2xl transition-opacity cursor-pointer"
+                className="py-5 border-2 border-ink bg-ink text-bg active:opacity-80 active:scale-[0.97] font-mono text-2xl transition-all duration-100 cursor-pointer"
               >
                 Yes
               </button>

@@ -24,7 +24,7 @@ export function QuickScores() {
             key={i}
             onClick={() => quickScore(val)}
             onTouchEnd={e => (e.currentTarget as HTMLElement).blur()}
-            className={`py-3 text-center font-mono text-sm md:text-base select-none cursor-pointer border-none outline-none touch-none transition-colors ${cls}`}
+            className={`py-3 text-center font-mono text-sm md:text-base select-none cursor-pointer border-none outline-none touch-none transition-colors active:scale-[0.97] transition-transform duration-75 ${cls}`}
           >
             <span className="hidden md:block text-xs leading-none mb-0.5 text-ink-light">
               {FKEY_LABELS[i]}

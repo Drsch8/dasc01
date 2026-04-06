@@ -125,8 +125,8 @@ export function SetupScreen() {
   const fieldLabel = 'block text-2xs tracking-[0.12em] uppercase text-ink-light mb-2'
 
   return (
-    <div className="min-h-screen bg-bg p-4 md:p-12">
-      <div className="flex items-end justify-between mb-4 md:mb-12">
+    <div className="min-h-dvh bg-bg px-4 pt-10 pb-6 md:p-12">
+      <div className="flex items-end justify-between mb-10 md:mb-12">
         <div className="flex items-end gap-5">
           <h1 className="font-display font-black text-[clamp(3rem,8vw,5rem)] leading-[0.9] tracking-tight">
             Darts
@@ -140,7 +140,7 @@ export function SetupScreen() {
         </div>
         <button
           onClick={() => setShowHelp(true)}
-          className="font-mono text-sm text-ink-light active:text-ink border border-rule active:border-ink px-3 py-1.5 transition-colors mb-1"
+          className="font-mono text-sm text-ink-light active:text-ink border border-rule active:border-ink px-3 py-1.5 transition-colors active:scale-[0.97] transition-transform duration-100 mb-1"
         >
           ?
         </button>
@@ -210,7 +210,7 @@ export function SetupScreen() {
 
           <button
             onClick={handleStart}
-            className="bg-ink text-bg py-3 font-mono text-sm tracking-[0.06em] active:opacity-80 transition-opacity w-full"
+            className="bg-ink text-bg py-3 font-mono text-sm tracking-[0.06em] active:opacity-80 active:scale-[0.98] transition-all duration-100 w-full"
           >
             Start Game
           </button>

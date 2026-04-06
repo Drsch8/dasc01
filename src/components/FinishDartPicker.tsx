@@ -64,7 +64,7 @@ export function FinishDartPicker() {
                 disabled={!enabled}
                 className={`py-5 border-2 font-mono text-2xl transition-colors
                   ${enabled
-                    ? 'border-rule active:border-ink active:bg-ink-faint cursor-pointer'
+                    ? 'border-rule active:border-ink active:bg-ink-faint active:scale-[0.97] transition-transform duration-100 cursor-pointer'
                     : 'border-rule/30 text-ink-faint cursor-not-allowed'
                   }`}
               >

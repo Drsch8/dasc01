@@ -88,8 +88,8 @@ export function StatsScreen() {
             <button onClick={() => setConfirmNew(false)} className="absolute top-3 right-3 text-ink-faint active:text-ink font-mono text-lg leading-none" aria-label="Cancel">✕</button>
             <p className="font-display font-black text-3xl">New game?</p>
             <div className="grid grid-cols-2 gap-3">
-              <button onClick={() => setConfirmNew(false)} className="py-5 border-2 border-rule active:border-ink active:bg-bg font-mono text-2xl transition-colors cursor-pointer">No</button>
-              <button onClick={() => { setConfirmNew(false); setScreen('setup') }} className="py-5 border-2 border-ink bg-ink text-bg active:opacity-80 font-mono text-2xl transition-opacity cursor-pointer">Yes</button>
+              <button onClick={() => setConfirmNew(false)} className="py-5 border-2 border-rule active:border-ink active:bg-bg active:scale-[0.97] font-mono text-2xl transition-all duration-100 cursor-pointer">No</button>
+              <button onClick={() => { setConfirmNew(false); setScreen('setup') }} className="py-5 border-2 border-ink bg-ink text-bg active:opacity-80 active:scale-[0.97] font-mono text-2xl transition-all duration-100 cursor-pointer">Yes</button>
             </div>
           </div>
         </div>

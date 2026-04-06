@@ -23,8 +23,8 @@ export function WinnerPopup() {
 
   if (!winnerName) return null
 
-  const btnGhost = 'py-4 border-2 border-rule active:border-ink active:bg-bg font-mono text-sm tracking-wide transition-colors cursor-pointer bg-transparent'
-  const btnFill  = 'py-4 border-2 border-ink bg-ink text-bg active:opacity-80 font-mono text-sm tracking-wide transition-opacity cursor-pointer'
+  const btnGhost = 'py-4 border-2 border-rule active:border-ink active:bg-bg active:scale-[0.97] font-mono text-sm tracking-wide transition-all duration-100 cursor-pointer bg-transparent'
+  const btnFill  = 'py-4 border-2 border-ink bg-ink text-bg active:opacity-80 active:scale-[0.97] font-mono text-sm tracking-wide transition-all duration-100 cursor-pointer'
 
   return (
     <div

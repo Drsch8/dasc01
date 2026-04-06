@@ -110,8 +110,8 @@ export function CricketSetup() {
   const fieldLabel = 'block text-2xs tracking-[0.12em] uppercase text-ink-light mb-2'
 
   return (
-    <div className="min-h-screen bg-bg p-4 md:p-12">
-      <div className="flex items-end justify-between mb-4 md:mb-12">
+    <div className="min-h-dvh bg-bg px-4 pt-10 pb-6 md:p-12">
+      <div className="flex items-end justify-between mb-10 md:mb-12">
         <div className="flex items-end gap-5">
           <Link
             href="/"
@@ -125,7 +125,7 @@ export function CricketSetup() {
         </div>
         <button
           onClick={() => setShowHelp(true)}
-          className="font-mono text-sm text-ink-light active:text-ink border border-rule active:border-ink px-3 py-1.5 transition-colors mb-1"
+          className="font-mono text-sm text-ink-light active:text-ink border border-rule active:border-ink px-3 py-1.5 transition-colors active:scale-[0.97] transition-transform duration-100 mb-1"
         >
           ?
         </button>
@@ -157,34 +157,30 @@ export function CricketSetup() {
 
         <div>
           <label className={fieldLabel}>Numbers in play</label>
-          <div className="grid grid-cols-2 gap-2">
-            {([[20, 19, 18, 17, 16, 15], [14, 13, 12, 11, 25]] as const).map((col, ci) => (
-              <div key={ci} className="flex flex-col gap-2">
-                {col.map(n => {
-                  const active = numbers.includes(n)
-                  return (
-                    <button
-                      key={n}
-                      onClick={() => toggleNumber(n)}
-                      className={`px-4 py-2 font-mono text-sm border transition-colors cursor-pointer
-                        ${active
-                          ? 'border-ink bg-ink text-bg'
-                          : 'border-rule bg-bg text-ink-light active:border-ink active:text-ink'
-                        }`}
-                    >
-                      {n === 25 ? 'Bull' : n}
-                    </button>
-                  )
-                })}
-              </div>
-            ))}
+          <div className="flex flex-wrap gap-2">
+            {([20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 25] as const).map(n => {
+              const isActive = numbers.includes(n)
+              return (
+                <button
+                  key={n}
+                  onClick={() => toggleNumber(n)}
+                  className={`px-4 py-2 font-mono text-sm border transition-colors active:scale-[0.97] transition-transform duration-100 cursor-pointer
+                    ${isActive
+                      ? 'border-ink bg-ink text-bg'
+                      : 'border-rule bg-bg text-ink-light active:border-ink active:text-ink'
+                    }`}
+                >
+                  {n === 25 ? 'Bull' : n}
+                </button>
+              )
+            })}
           </div>
         </div>
 
         <button
           onClick={handleStart}
           disabled={numbers.length === 0}
-          className="bg-ink text-bg py-3 font-mono text-sm tracking-[0.06em] active:opacity-80 transition-opacity w-full disabled:opacity-30"
+          className="bg-ink text-bg py-3 font-mono text-sm tracking-[0.06em] active:opacity-80 active:scale-[0.98] transition-all duration-100 w-full disabled:opacity-30"
         >
           Start Game
         </button>
