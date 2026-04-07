@@ -160,14 +160,14 @@ export function CricketSetup() {
           <label className={fieldLabel}>Numbers in play</label>
           <div className="flex gap-2 w-fit mx-auto">
             {([[20, 19, 18, 17, 16, 15], [14, 13, 12, 11, 25]] as const).map((col, ci) => (
-              <div key={ci} className="flex flex-col gap-2">
+              <div key={ci} className="flex flex-col gap-2 w-20">
                 {col.map(n => {
                   const isActive = numbers.includes(n)
                   return (
                     <button
                       key={n}
                       onClick={() => toggleNumber(n)}
-                      className={`px-4 py-2 font-mono text-sm border transition-colors active:scale-[0.97] transition-transform duration-100 cursor-pointer
+                      className={`w-full py-2 font-mono text-sm border transition-colors active:scale-[0.97] transition-transform duration-100 cursor-pointer
                         ${isActive
                           ? 'border-ink bg-ink text-bg'
                           : 'border-rule bg-bg text-ink-light active:border-ink active:text-ink'

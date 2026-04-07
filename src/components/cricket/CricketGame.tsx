@@ -120,13 +120,14 @@ export function CricketGame() {
                 `}
                 style={{ gridTemplateColumns: '1fr 5rem 1fr' }}
               >
-                {/* Flash overlay */}
-                <div className={`absolute inset-0 z-10 pointer-events-none transition-colors duration-75 ${activeRow === n ? 'bg-ink/25' : 'bg-transparent'}`} />
-
                 {/* P1 marks */}
                 <div
-                  className={`flex items-center justify-center px-4 border-r border-rule
-                  ${active(0) && !fullyClosed ? 'bg-paper' : 'bg-bg'}`}
+                  className="flex items-center justify-center px-4 border-r border-rule transition-colors duration-75"
+                  style={{
+                    backgroundColor: activeRow === n && current === 0
+                      ? 'rgba(26,26,24,0.12)'
+                      : active(0) && !fullyClosed ? 'var(--paper)' : 'var(--bg)',
+                  }}
                   onClick={current === 1 ? e => e.stopPropagation() : undefined}
                 >
                   <div className={fullyClosed ? 'opacity-25' : ''}>
@@ -135,7 +136,12 @@ export function CricketGame() {
                 </div>
 
                 {/* Number */}
-                <div className="flex items-center justify-center bg-paper">
+                <div
+                  className="flex items-center justify-center transition-colors duration-75"
+                  style={{
+                    backgroundColor: activeRow === n ? 'rgba(26,26,24,0.12)' : 'var(--paper)',
+                  }}
+                >
                   <span className={`font-display font-black text-2xl ${fullyClosed ? 'text-ink-faint' : 'text-ink'}`}>
                     {label}
                   </span>
@@ -143,8 +149,12 @@ export function CricketGame() {
 
                 {/* P2 marks */}
                 <div
-                  className={`flex items-center justify-center px-4 border-l border-rule
-                  ${active(1) && !fullyClosed ? 'bg-paper' : 'bg-bg'}`}
+                  className="flex items-center justify-center px-4 border-l border-rule transition-colors duration-75"
+                  style={{
+                    backgroundColor: activeRow === n && current === 1
+                      ? 'rgba(26,26,24,0.12)'
+                      : active(1) && !fullyClosed ? 'var(--paper)' : 'var(--bg)',
+                  }}
                   onClick={current === 0 ? e => e.stopPropagation() : undefined}
                 >
                   <div className={fullyClosed ? 'opacity-25' : ''}>
