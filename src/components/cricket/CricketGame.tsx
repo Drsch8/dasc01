@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useCricketStore } from '@/store/cricket-store'
 
 function Marks({ count }: { count: number }) {
@@ -20,6 +20,8 @@ export function CricketGame() {
   const undo           = useCricketStore(s => s.undo)
   const newGame        = useCricketStore(s => s.newGame)
   const [confirmNew, setConfirmNew] = useState(false)
+  const [activeRow, setActiveRow] = useState<number | null>(null)
+  const clearActive = useCallback(() => setActiveRow(null), [])
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -109,14 +111,17 @@ export function CricketGame() {
                 key={n}
                 onClick={() => addMark(n)}
                 disabled={winner !== null}
-                onTouchEnd={e => (e.currentTarget as HTMLElement).blur()}
-                className={`group relative flex-1 grid border-b border-rule
+                onPointerDown={() => { if (winner === null) setActiveRow(n) }}
+                onPointerUp={clearActive}
+                onPointerLeave={clearActive}
+                onTouchEnd={e => { clearActive(); (e.currentTarget as HTMLElement).blur() }}
+                className={`relative flex-1 grid border-b border-rule
                   ${winner === null ? 'cursor-pointer' : 'cursor-default'}
                 `}
                 style={{ gridTemplateColumns: '1fr 5rem 1fr' }}
               >
                 {/* Flash overlay */}
-                <div className="absolute inset-0 z-10 group-active:bg-ink/20 pointer-events-none" />
+                <div className={`absolute inset-0 z-10 pointer-events-none transition-colors duration-75 ${activeRow === n ? 'bg-ink/25' : 'bg-transparent'}`} />
 
                 {/* P1 marks */}
                 <div

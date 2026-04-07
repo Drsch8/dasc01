@@ -110,8 +110,8 @@ export function CricketSetup() {
   const fieldLabel = 'block text-2xs tracking-[0.12em] uppercase text-ink-light mb-2'
 
   return (
-    <div className="h-dvh overflow-y-auto bg-bg px-4 pt-8 pb-6 md:p-12">
-      <div className="flex items-end justify-between mb-6 md:mb-12">
+    <div className="h-dvh flex flex-col bg-bg">
+      <div className="shrink-0 flex items-end justify-between px-4 pt-8 pb-6 md:px-12 md:pt-12 md:pb-8">
         <div className="flex items-end gap-5">
           <Link
             href="/"
@@ -133,6 +133,7 @@ export function CricketSetup() {
 
       {showHelp && <HelpOverlay onClose={() => setShowHelp(false)} />}
 
+      <div className="flex-1 overflow-y-auto px-4 pb-6 md:px-12 md:pb-12">
       <div className="bg-paper border border-rule w-full md:w-[380px] p-4 md:p-8 flex flex-col gap-3 md:gap-6">
         <div>
           <label className={fieldLabel}>Player 1</label>
@@ -188,6 +189,7 @@ export function CricketSetup() {
         >
           Start Game
         </button>
+      </div>
       </div>
     </div>
   )

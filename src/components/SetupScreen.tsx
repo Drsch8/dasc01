@@ -125,8 +125,8 @@ export function SetupScreen() {
   const fieldLabel = 'block text-2xs tracking-[0.12em] uppercase text-ink-light mb-2'
 
   return (
-    <div className="h-dvh overflow-y-auto bg-bg px-4 pt-8 pb-6 md:p-12">
-      <div className="flex items-end justify-between mb-6 md:mb-12">
+    <div className="h-dvh flex flex-col bg-bg">
+      <div className="shrink-0 flex items-end justify-between px-4 pt-8 pb-6 md:px-12 md:pt-12 md:pb-8">
         <div className="flex items-end gap-5">
           <h1 className="font-display font-black text-[clamp(3rem,8vw,5rem)] leading-[0.9] tracking-tight">
             Darts
@@ -148,6 +148,7 @@ export function SetupScreen() {
 
       {showHelp && <HelpOverlay onClose={() => setShowHelp(false)} />}
 
+      <div className="flex-1 overflow-y-auto px-4 pb-6 md:px-12 md:pb-12">
       <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
 
         {/* ── Config form ── */}
@@ -221,6 +222,7 @@ export function SetupScreen() {
           <SetupStats />
         </div>
 
+      </div>
       </div>
     </div>
   )
