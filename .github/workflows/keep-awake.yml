@@ -22,6 +22,9 @@ jobs:
       # can be answered by the API gateway without ever reaching Postgres, which
       # would not reset the inactivity clock. `players` has a public SELECT
       # policy, so the anon key is enough.
+      #
+      # `select=*` rather than a named column on purpose — this job runs
+      # unattended for months, and it should not break if a column is renamed.
       - name: Query Postgres
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -49,15 +52,30 @@ jobs:
           # Tolerate a trailing slash on the secret.
           base="${SUPABASE_URL%/}"
 
-          code=$(curl -sS -o /dev/null -w '%{http_code}' \
+          code=$(curl -sS -o response.json -w '%{http_code}' \
             -H "apikey: $SUPABASE_ANON_KEY" \
             -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
-            "$base/rest/v1/players?select=name&limit=1")
+            "$base/rest/v1/players?select=*&limit=1")
 
           echo "REST status: $code"
+
+          if [ "$code" = "200" ]; then
+            # Body is discarded on success — no reason to put player names in a log.
+            echo "Database reached — pause timer reset."
+            exit 0
+          fi
+
+          # On failure PostgREST returns a JSON error that names the exact
+          # problem (bad column, missing table, RLS denial). Show it.
+          echo "Response body:"
+          cat response.json || true
+          echo
+
           case "$code" in
-            200) echo "Database reached — pause timer reset." ;;
-            401|403) echo "::error::Rejected ($code) — SUPABASE_ANON_KEY looks wrong."; exit 1 ;;
-            404) echo "::error::Not found (404) — check the project URL, or whether the players table still exists."; exit 1 ;;
-            *)   echo "::error::Unexpected status $code."; exit 1 ;;
+            400) echo "::error::Bad request (400) — the query is invalid for this schema; see the body above." ;;
+            401|403) echo "::error::Rejected ($code) — SUPABASE_ANON_KEY is wrong, or the RLS policy on players changed." ;;
+            404) echo "::error::Not found (404) — check the project URL, or whether the players table still exists." ;;
+            5*) echo "::error::Supabase returned $code — likely a transient outage; the next run will retry." ;;
+            *) echo "::error::Unexpected status $code." ;;
           esac
+          exit 1
