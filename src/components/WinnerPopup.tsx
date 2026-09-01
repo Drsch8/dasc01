@@ -23,16 +23,16 @@ export function WinnerPopup() {
 
   if (!winnerName) return null
 
-  const btnGhost = 'py-4 border-2 border-rule active:border-ink active:bg-bg active:scale-[0.97] font-mono text-sm tracking-wide transition-all duration-100 cursor-pointer bg-transparent'
-  const btnFill  = 'py-4 border-2 border-ink bg-ink text-bg active:opacity-80 active:scale-[0.97] font-mono text-sm tracking-wide transition-all duration-100 cursor-pointer'
+  const btnGhost = 'py-4 border border-rule-strong text-ink-light active:border-ink active:text-ink active:scale-[0.97] font-cond text-base font-semibold tracking-caps uppercase transition-all duration-100 cursor-pointer bg-transparent'
+  const btnFill  = 'py-4 bg-accent text-ink border-none active:opacity-80 active:scale-[0.97] font-cond text-base font-bold tracking-caps uppercase transition-all duration-100 cursor-pointer'
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-bg/60 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-bg/70 backdrop-blur-sm"
       style={{ animation: 'fade-in 0.2s ease both' }}
     >
       <div
-        className="bg-paper border-2 border-ink p-8 text-center max-w-xs w-[90%] flex flex-col gap-6 relative overflow-visible"
+        className="bg-paper border-l-[5px] border-l-accent border-y border-r border-rule-strong p-8 text-center max-w-xs w-[90%] flex flex-col gap-6 relative overflow-visible"
         style={{ animation: 'winner-bounce-in 0.45s cubic-bezier(0.34,1.56,0.64,1) both' }}
         onClick={e => e.stopPropagation()}
       >
@@ -40,7 +40,7 @@ export function WinnerPopup() {
         {PARTICLES.map((p, i) => (
           <span
             key={i}
-            className="pointer-events-none select-none text-ink absolute"
+            className="pointer-events-none select-none text-accent absolute"
             style={{
               top: '50%',
               left: '50%',
@@ -56,11 +56,11 @@ export function WinnerPopup() {
         ))}
 
         <div className="flex flex-col gap-2">
-          <p className="text-xs tracking-[0.15em] uppercase text-ink-light font-mono">Winner</p>
-          <p className="font-display font-black text-5xl leading-tight break-words">{winnerName}</p>
+          <p className="font-cond text-xs font-semibold tracking-label uppercase text-ink-light">Winner</p>
+          <p className="font-num text-5xl leading-[0.9] tracking-[0.01em] uppercase break-words">{winnerName}</p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-2">
           <button onClick={rematch}  className={btnFill}>Rematch</button>
           <button onClick={newGame}  className={btnGhost}>New game</button>
         </div>
@@ -68,13 +68,13 @@ export function WinnerPopup() {
         <div className="flex items-center justify-between">
           <button
             onClick={undoWinner}
-            className="font-mono text-xs tracking-[0.1em] uppercase text-ink-faint active:text-ink transition-colors cursor-pointer bg-transparent border-none"
+            className="font-cond text-xs font-semibold tracking-caps uppercase text-ink-faint active:text-ink transition-colors cursor-pointer bg-transparent border-none"
           >
             ← Undo
           </button>
           <button
             onClick={dismissWinner}
-            className="font-mono text-xs tracking-[0.1em] uppercase text-ink-faint active:text-ink transition-colors cursor-pointer bg-transparent border-none"
+            className="font-cond text-xs font-semibold tracking-caps uppercase text-ink-faint active:text-ink transition-colors cursor-pointer bg-transparent border-none"
           >
             Stats →
           </button>

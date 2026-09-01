@@ -26,7 +26,7 @@ export function InputArea() {
         </div>
 
         {/* Score display */}
-        <div className={`font-display font-bold text-3xl md:text-4xl min-w-[72px] text-center
+        <div className={`font-num text-3xl md:text-4xl min-w-[72px] text-center
           border-b-2 pb-0.5 leading-tight transition-colors
           ${isInvalid ? 'text-bust border-bust' : 'text-ink border-ink'}`}>
           {inputStr || '_'}

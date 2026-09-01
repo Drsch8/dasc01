@@ -12,12 +12,14 @@ export function SetupStats() {
       .catch(() => setPlayers([]))
   }, [])
 
+  const sectionLabel = 'block font-cond text-[11px] font-semibold tracking-label uppercase text-ink-faint mb-2.5'
+
   if (players === null) return (
-    <div className="bg-paper border border-rule p-6 animate-pulse">
-      <div className="text-2xs tracking-[0.12em] uppercase text-ink-light mb-4">Career Stats</div>
-      <div className="flex flex-col gap-3">
+    <div className="animate-pulse">
+      <span className={sectionLabel}>Career Stats</span>
+      <div className="flex flex-col gap-0.5">
         {[1, 2, 3].map(i => (
-          <div key={i} className="h-4 bg-rule rounded" style={{ width: `${70 - i * 8}%` }} />
+          <div key={i} className="bg-paper h-11" />
         ))}
       </div>
     </div>
@@ -25,33 +27,35 @@ export function SetupStats() {
 
   if (players.length === 0) return null
 
+  const th = 'font-cond text-[11px] font-semibold tracking-label uppercase text-ink-faint font-normal pb-2'
+
   return (
-    <div className="bg-paper border border-rule p-6">
-      <div className="text-2xs tracking-[0.12em] uppercase text-ink-light mb-4">Career Stats</div>
-      <table className="w-full font-mono text-xs">
+    <div>
+      <span className={sectionLabel}>Career Stats</span>
+      <table className="w-full">
         <thead>
-          <tr className="text-ink-faint border-b border-rule">
-            <th className="text-left pb-2 font-normal">Player</th>
-            <th className="text-right pb-2 font-normal">M</th>
-            <th className="text-right pb-2 font-normal">W</th>
-            <th className="text-right pb-2 font-normal">Avg</th>
-            <th className="text-right pb-2 font-normal">Co%</th>
-            <th className="text-right pb-2 font-normal">180</th>
-            <th className="text-right pb-2 font-normal">140</th>
-            <th className="text-right pb-2 font-normal">100</th>
+          <tr className="border-b border-rule-strong">
+            <th className={`${th} text-left pl-3`}>Player</th>
+            <th className={`${th} text-right`}>M</th>
+            <th className={`${th} text-right`}>W</th>
+            <th className={`${th} text-right`}>Avg</th>
+            <th className={`${th} text-right`}>Co%</th>
+            <th className={`${th} text-right`}>180</th>
+            <th className={`${th} text-right`}>140</th>
+            <th className={`${th} text-right pr-3`}>100</th>
           </tr>
         </thead>
         <tbody>
           {players.map(p => (
-            <tr key={p.name} className="border-b border-rule/40">
-              <td className="py-1.5 text-ink">{p.name}</td>
-              <td className="py-1.5 text-right text-ink-light">{p.matches}</td>
-              <td className="py-1.5 text-right text-ink-light">{p.wins}</td>
-              <td className="py-1.5 text-right text-ink-light">{p.avg_score ?? '—'}</td>
-              <td className="py-1.5 text-right text-ink-light">{p.co_pct != null ? `${p.co_pct}%` : '—'}</td>
-              <td className="py-1.5 text-right text-ink-light">{p.total_180s}</td>
-              <td className="py-1.5 text-right text-ink-light">{p.total_140s}</td>
-              <td className="py-1.5 text-right text-ink-light">{p.total_100s}</td>
+            <tr key={p.name} className="bg-paper border-b-2 border-bg">
+              <td className="py-2 pl-3 font-cond text-base font-semibold tracking-[0.06em] uppercase text-ink truncate max-w-[8rem]">{p.name}</td>
+              <td className="py-2 text-right font-cond text-sm tracking-[0.08em] text-ink-light">{p.matches}</td>
+              <td className="py-2 text-right font-cond text-sm tracking-[0.08em] text-ink-light">{p.wins}</td>
+              <td className="py-2 text-right font-num text-lg leading-none text-ink">{p.avg_score ?? '—'}</td>
+              <td className="py-2 text-right font-cond text-sm tracking-[0.08em] text-ink-light">{p.co_pct != null ? `${p.co_pct}%` : '—'}</td>
+              <td className="py-2 text-right font-cond text-sm tracking-[0.08em] text-ink-light">{p.total_180s}</td>
+              <td className="py-2 text-right font-cond text-sm tracking-[0.08em] text-ink-light">{p.total_140s}</td>
+              <td className="py-2 pr-3 text-right font-cond text-sm tracking-[0.08em] text-ink-light">{p.total_100s}</td>
             </tr>
           ))}
         </tbody>

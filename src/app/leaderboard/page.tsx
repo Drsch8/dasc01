@@ -63,76 +63,64 @@ function fmt(n: number | null, decimals = 1): string {
 function timeAgo(iso: string): string {
   const diff = Date.now() - new Date(iso).getTime()
   const m = Math.floor(diff / 60000)
-  if (m < 60) return `${m}m ago`
+  if (m < 60) return `${m}M`
   const h = Math.floor(m / 60)
-  if (h < 24) return `${h}h ago`
-  return `${Math.floor(h / 24)}d ago`
+  if (h < 24) return `${h}H`
+  return `${Math.floor(h / 24)}D`
 }
 
 export default async function LeaderboardPage() {
   const { career, recent } = await getData()
 
-  const th = 'text-left text-2xs tracking-[0.12em] uppercase text-ink-light font-normal py-2 pr-4 border-b-2 border-rule'
-  const td = 'py-2 pr-4 text-sm border-b border-rule'
-  const tdMono = `${td} font-mono`
+  // Ranked by average — the leader gets the green bar.
+  const ranked = [...career].sort((a, b) => (b.avg_score ?? -1) - (a.avg_score ?? -1))
+
+  const sectionLabel = 'block font-cond text-[11px] font-semibold tracking-label uppercase text-ink-faint mb-2.5'
 
   return (
     <div className="min-h-screen bg-bg">
       {/* Header */}
-      <div className="flex items-center justify-between px-5 py-3 border-b border-rule bg-paper sticky top-0 z-10">
-        <h1 className="font-display font-black text-2xl tracking-tight">Leaderboard</h1>
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-rule bg-bg sticky top-0 z-10">
+        <h1 className="font-cond text-xs font-semibold tracking-label uppercase text-ink-light">Leaderboard</h1>
         <Link
           href="/"
-          className="border border-rule px-4 py-2 text-sm text-ink-light font-mono active:border-ink active:text-ink transition-colors"
+          className="border border-rule-strong px-3 py-1.5 font-cond text-[13px] font-semibold tracking-caps uppercase text-ink-light active:border-ink active:text-ink transition-colors"
         >
-          ← Back
+          Back
         </Link>
       </div>
 
-      <div className="px-4 md:px-8 py-6 max-w-5xl mx-auto flex flex-col gap-10">
+      <div className="px-4 md:px-8 py-6 max-w-3xl mx-auto flex flex-col gap-7">
 
-        {/* Career stats table */}
+        {/* Ranked by average */}
         <section>
-          <h2 className="text-2xs tracking-[0.12em] uppercase text-ink-light mb-4">Career Stats</h2>
+          <span className={sectionLabel}>Ranked by average</span>
 
-          {career.length === 0 ? (
+          {ranked.length === 0 ? (
             <p className="text-sm text-ink-light">No matches recorded yet.</p>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full font-mono text-ink whitespace-nowrap">
-                <thead>
-                  <tr>
-                    <th className={th}>Player</th>
-                    <th className={`${th} text-right`}>M</th>
-                    <th className={`${th} text-right`}>W</th>
-                    <th className={`${th} text-right`}>Legs</th>
-                    <th className={`${th} text-right`}>Avg</th>
-                    <th className={`${th} text-right`}>First 9</th>
-                    <th className={`${th} text-right`}>CO%</th>
-                    <th className={`${th} text-right`}>180s</th>
-                    <th className={`${th} text-right`}>140+</th>
-                    <th className={`${th} text-right`}>100+</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {career.map((row, i) => (
-                    <tr key={row.name} className={i % 2 === 0 ? 'bg-paper' : ''}>
-                      <td className={`${td} font-display font-bold text-base`}>{row.name}</td>
-                      <td className={`${tdMono} text-right`}>{row.matches}</td>
-                      <td className={`${tdMono} text-right`}>{row.wins}</td>
-                      <td className={`${tdMono} text-right`}>{row.legs_won}</td>
-                      <td className={`${tdMono} text-right font-medium ${row.avg_score && row.avg_score >= 80 ? 'text-finish' : ''}`}>
-                        {fmt(row.avg_score)}
-                      </td>
-                      <td className={`${tdMono} text-right`}>{fmt(row.first9_avg)}</td>
-                      <td className={`${tdMono} text-right`}>{fmt(row.co_pct)}%</td>
-                      <td className={`${tdMono} text-right`}>{row.total_180s}</td>
-                      <td className={`${tdMono} text-right`}>{row.total_140s}</td>
-                      <td className={`${tdMono} text-right`}>{row.total_100s}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="flex flex-col gap-0.5">
+              {ranked.map((row, i) => (
+                <div
+                  key={row.name}
+                  className="bg-paper px-3.5 py-3 flex items-center gap-3"
+                  style={{ borderLeft: `4px solid ${i === 0 ? 'var(--finish)' : 'var(--rule-strong)'}` }}
+                >
+                  <div className="font-num text-xl leading-none text-ink-faint w-6 shrink-0">{i + 1}</div>
+                  <div className="flex-1 min-w-0">
+                    <div className={`font-cond text-xl font-semibold tracking-[0.06em] uppercase truncate ${i === 0 ? 'text-ink' : 'text-ink'}`}>
+                      {row.name}
+                    </div>
+                    <div className="font-cond text-xs tracking-caps uppercase text-ink-light truncate">
+                      {row.matches} M · {row.wins} W · {row.legs_won} Legs · CO {fmt(row.co_pct)}% · F9 {fmt(row.first9_avg)}
+                      <span className="hidden sm:inline"> · {row.total_180s}×180 · {row.total_140s}×140 · {row.total_100s}×100</span>
+                    </div>
+                  </div>
+                  <div className={`font-num text-[32px] leading-none shrink-0 ${i === 0 ? 'text-finish' : 'text-ink'}`}>
+                    {fmt(row.avg_score)}
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </section>
@@ -140,28 +128,30 @@ export default async function LeaderboardPage() {
         {/* Recent matches */}
         {recent.length > 0 && (
           <section>
-            <h2 className="text-2xs tracking-[0.12em] uppercase text-ink-light mb-4">Recent Matches</h2>
-            <div className="flex flex-col gap-2">
+            <span className={sectionLabel}>Recent matches</span>
+            <div className="flex flex-col gap-0.5">
               {recent.map(m => {
-                const setsToWin = Math.max(m.p1_sets, m.p2_sets)
-                const showSets = setsToWin > 1
-                const score = showSets
-                  ? `${m.p1_sets}–${m.p2_sets} sets`
-                  : `${m.p1_legs_won}–${m.p2_legs_won} legs`
+                const showSets = Math.max(m.p1_sets, m.p2_sets) > 1
+                const [a, b] = showSets
+                  ? [m.p1_sets, m.p2_sets]
+                  : [m.p1_legs_won, m.p2_legs_won]
+                const p1Won = m.winner === m.p1_name
                 return (
-                  <div key={m.id} className="bg-paper border border-rule px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-                    <div className="flex items-center gap-3">
-                      <span className={`font-display font-bold text-lg ${m.winner === m.p1_name ? 'text-ink' : 'text-ink-light'}`}>
+                  <div key={m.id} className="bg-panel px-3.5 py-3 flex items-center justify-between gap-3">
+                    <div className="flex items-baseline gap-2.5 min-w-0">
+                      <span className={`font-cond text-lg tracking-[0.06em] uppercase truncate ${p1Won ? 'font-semibold text-ink' : 'font-medium text-ink-light'}`}>
                         {m.p1_name}
                       </span>
-                      <span className="text-ink-light text-sm font-mono">{score}</span>
-                      <span className={`font-display font-bold text-lg ${m.winner === m.p2_name ? 'text-ink' : 'text-ink-light'}`}>
+                      <span className={`font-num text-xl leading-none shrink-0 ${p1Won ? 'text-ink' : 'text-ink-light'}`}>{a}</span>
+                      <span className="font-cond text-sm text-ink-faint shrink-0">–</span>
+                      <span className={`font-num text-xl leading-none shrink-0 ${p1Won ? 'text-ink-light' : 'text-ink'}`}>{b}</span>
+                      <span className={`font-cond text-lg tracking-[0.06em] uppercase truncate ${p1Won ? 'font-medium text-ink-light' : 'font-semibold text-ink'}`}>
                         {m.p2_name}
                       </span>
                     </div>
-                    <div className="flex items-center gap-4 text-xs text-ink-light font-mono">
-                      <span>{fmt(m.p1_avg)} / {fmt(m.p2_avg)} avg</span>
-                      <span>{m.start_score}</span>
+                    <div className="flex items-center gap-3 font-cond text-xs tracking-caps uppercase text-ink-faint shrink-0">
+                      <span className="hidden sm:inline">{fmt(m.p1_avg)} / {fmt(m.p2_avg)}</span>
+                      <span className="hidden sm:inline">{m.start_score}</span>
                       <span>{timeAgo(m.played_at)}</span>
                     </div>
                   </div>

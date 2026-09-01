@@ -45,16 +45,16 @@ export function FinishDartPicker() {
   if (possible.size === 1) return null  // auto-confirming, don't flash the picker
 
   return (
-    <div className="fixed inset-0 bg-bg/60 backdrop-blur-sm z-50 flex items-center justify-center">
-      <div className="bg-paper border-2 border-ink p-8 text-center max-w-xs w-[90%] flex flex-col gap-6 relative">
+    <div className="fixed inset-0 bg-bg/70 backdrop-blur-sm z-50 flex items-center justify-center">
+      <div className="bg-paper border-l-[5px] border-l-finish border-y border-r border-rule-strong p-8 text-center max-w-xs w-[90%] flex flex-col gap-6 relative">
         <div>
-          <p className="text-xs tracking-[0.15em] uppercase text-ink-light font-mono mb-2">
+          <p className="font-cond text-xs font-semibold tracking-label uppercase text-finish mb-2">
             Checked out {pendingCheckout.checkoutScore}
           </p>
-          <p className="font-display font-black text-3xl">Which dart?</p>
+          <p className="font-num text-3xl tracking-[0.02em] uppercase">Which dart?</p>
         </div>
 
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-3 gap-2">
           {([1, 2, 3] as const).map(d => {
             const enabled = possible.has(d)
             return (
@@ -62,10 +62,10 @@ export function FinishDartPicker() {
                 key={d}
                 onClick={() => enabled && confirmFinishDart(d)}
                 disabled={!enabled}
-                className={`py-5 border-2 font-mono text-2xl transition-colors
+                className={`py-5 font-num text-3xl leading-none transition-colors
                   ${enabled
-                    ? 'border-rule active:border-ink active:bg-ink-faint active:scale-[0.97] transition-transform duration-100 cursor-pointer'
-                    : 'border-rule/30 text-ink-faint cursor-not-allowed'
+                    ? 'bg-key text-ink active:bg-accent active:scale-[0.97] transition-transform duration-100 cursor-pointer'
+                    : 'bg-panel text-ink-faint/40 cursor-not-allowed'
                   }`}
               >
                 {d}
@@ -77,11 +77,11 @@ export function FinishDartPicker() {
         <div className="flex items-center justify-between">
           <button
             onClick={undo}
-            className="font-mono text-xs tracking-[0.1em] uppercase text-ink-faint active:text-ink transition-colors cursor-pointer bg-transparent border-none"
+            className="font-cond text-xs font-semibold tracking-caps uppercase text-ink-faint active:text-ink transition-colors cursor-pointer bg-transparent border-none"
           >
             ← Undo
           </button>
-          <p className="text-xs text-ink-light font-mono">Press 1 · 2 · 3</p>
+          <p className="font-cond text-xs tracking-caps text-ink-faint">Press 1 · 2 · 3</p>
         </div>
       </div>
     </div>

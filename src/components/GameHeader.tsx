@@ -6,7 +6,7 @@ import { useSpeech } from '@/hooks/use-speech'
 
 function MicIcon({ crossed }: { crossed?: boolean }) {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       {/* mic body */}
       <rect x="5.5" y="1" width="5" height="8" rx="2.5" />
       {/* stand + base */}
@@ -16,6 +16,23 @@ function MicIcon({ crossed }: { crossed?: boolean }) {
       {crossed && <line x1="2" y1="2" x2="14" y2="14" strokeWidth="1.5" />}
     </svg>
   )
+}
+
+/** "SET 1 · LEG 2 · BEST OF 5" — the broadcast strap line. */
+function MatchMeta() {
+  const config = useGameStore(s => s.config)
+  const legs = useGameStore(s => s.legs)
+  const sets = useGameStore(s => s.sets)
+
+  if (config.training) return <>TRAINING &middot; {config.startScore}</>
+
+  const parts: string[] = []
+  if (config.setsToWin > 1) parts.push(`SET ${sets[0] + sets[1] + 1}`)
+  parts.push(`LEG ${legs[0] + legs[1] + 1}`)
+  parts.push(`FIRST TO ${config.legsToWin}`)
+  parts.push(String(config.startScore))
+
+  return <>{parts.join(' · ')}</>
 }
 
 export function GameHeader() {
@@ -49,15 +66,15 @@ export function GameHeader() {
     return () => document.removeEventListener('mousedown', handler)
   }, [menuOpen])
 
-  const hdrBtn = 'border border-rule px-4 py-2 text-sm text-ink-light font-mono active:border-ink active:text-ink active:scale-[0.97] transition-all duration-100 cursor-pointer bg-transparent'
+  const hdrBtn = 'border border-rule-strong px-3 py-1.5 font-cond text-[13px] font-semibold tracking-caps text-ink-light active:border-ink active:text-ink active:scale-[0.97] transition-all duration-100 cursor-pointer bg-transparent uppercase'
 
   const voiceBtn = supported ? (
     <button
       onClick={toggleMute}
       title={muted ? 'Unmute voice' : 'Mute voice'}
-      className={`border px-4 py-2 text-sm font-mono transition-colors cursor-pointer bg-transparent ${
+      className={`border px-3 py-1.5 flex items-center transition-colors cursor-pointer bg-transparent ${
         muted
-          ? 'border-rule text-ink-faint active:border-ink active:text-ink'
+          ? 'border-rule-strong text-ink-faint active:border-ink active:text-ink'
           : 'border-finish text-finish'
       }`}
     >
@@ -66,30 +83,40 @@ export function GameHeader() {
   ) : null
 
   return (
-    <div className="flex items-center justify-between px-5 py-3 border-b border-rule bg-paper sticky top-0 z-20">
-      <button onClick={handleNewGame} className="font-display font-bold text-2xl tracking-tight bg-transparent border-none cursor-pointer">Darts</button>
+    <div className="flex items-center justify-between gap-3 px-4 py-2.5 border-b border-rule bg-bg sticky top-0 z-20 shrink-0">
+      {/* Desktop: wordmark + full button row */}
+      <button
+        onClick={handleNewGame}
+        className="hidden md:block font-num text-2xl leading-none tracking-[0.02em] bg-transparent border-none cursor-pointer text-ink"
+      >
+        DARTS
+      </button>
+
+      <div className="hidden md:block font-cond text-xs font-semibold tracking-label text-ink-light truncate">
+        <MatchMeta />
+      </div>
 
       {confirmNew && (
-        <div className="fixed inset-0 bg-bg/60 backdrop-blur-sm z-50 flex items-center justify-center" onClick={() => setConfirmNew(false)}>
-          <div className="bg-paper border-2 border-ink p-8 text-center max-w-xs w-[90%] flex flex-col gap-6 relative" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 bg-bg/70 backdrop-blur-sm z-50 flex items-center justify-center" onClick={() => setConfirmNew(false)}>
+          <div className="bg-paper border border-rule-strong p-8 text-center max-w-xs w-[90%] flex flex-col gap-6 relative" onClick={e => e.stopPropagation()}>
             <button
               onClick={() => setConfirmNew(false)}
-              className="absolute top-3 right-3 text-ink-faint active:text-ink font-mono text-lg leading-none"
+              className="absolute top-3 right-3 text-ink-faint active:text-ink font-cond text-lg leading-none"
               aria-label="Cancel"
             >✕</button>
-            <p className="font-display font-black text-3xl">New game?</p>
-            <div className="grid grid-cols-2 gap-3">
+            <p className="font-num text-3xl tracking-[0.02em]">NEW GAME?</p>
+            <div className="grid grid-cols-2 gap-2">
               <button
                 onClick={() => setConfirmNew(false)}
-                className="py-5 border-2 border-rule active:border-ink active:bg-bg active:scale-[0.97] font-mono text-2xl transition-all duration-100 cursor-pointer"
+                className="py-5 border border-rule-strong text-ink-light active:border-ink active:text-ink active:scale-[0.97] font-cond text-lg font-semibold tracking-caps transition-all duration-100 cursor-pointer"
               >
-                No
+                NO
               </button>
               <button
                 onClick={confirmYes}
-                className="py-5 border-2 border-ink bg-ink text-bg active:opacity-80 active:scale-[0.97] font-mono text-2xl transition-all duration-100 cursor-pointer"
+                className="py-5 bg-accent text-ink active:opacity-80 active:scale-[0.97] font-cond text-lg font-bold tracking-caps transition-all duration-100 cursor-pointer border-none"
               >
-                Yes
+                YES
               </button>
             </div>
           </div>
@@ -105,41 +132,48 @@ export function GameHeader() {
         <button className={hdrBtn} onClick={handleNewGame}>New</button>
       </div>
 
-      {/* Mobile: voice + undo + burger */}
-      <div className="flex md:hidden gap-2 items-center" ref={menuRef}>
-        {voiceBtn}
-        <button className={hdrBtn} onClick={undo}>Undo</button>
+      {/* Mobile: burger · meta · voice + undo */}
+      <div className="flex md:hidden items-center gap-2" ref={menuRef}>
         <button
           onClick={() => setMenuOpen(o => !o)}
-          className={hdrBtn}
+          className="text-ink-light active:text-ink text-xl leading-none px-1 bg-transparent border-none cursor-pointer"
           aria-label="Menu"
         >
           ☰
         </button>
 
         {menuOpen && (
-          <div className="absolute top-full right-0 mt-px bg-paper border border-rule shadow-lg z-30 flex flex-col min-w-36">
+          <div className="absolute top-full left-0 mt-px bg-paper border border-rule-strong shadow-lg z-30 flex flex-col min-w-40">
             <Link
               href="/leaderboard"
-              className="px-5 py-3 text-sm font-mono text-ink-light active:bg-bg active:text-ink transition-colors"
+              className="px-5 py-3 font-cond text-sm font-semibold tracking-caps uppercase text-ink-light active:bg-panel active:text-ink transition-colors"
               onClick={() => setMenuOpen(false)}
             >
               Board
             </Link>
             <button
-              className="px-5 py-3 text-sm font-mono text-ink-light active:bg-bg active:text-ink transition-colors text-left"
+              className="px-5 py-3 font-cond text-sm font-semibold tracking-caps uppercase text-ink-light active:bg-panel active:text-ink transition-colors text-left"
               onClick={() => { setScreen('stats'); setMenuOpen(false) }}
             >
               Stats
             </button>
             <button
-              className="px-5 py-3 text-sm font-mono text-ink-light active:bg-bg active:text-ink transition-colors text-left"
+              className="px-5 py-3 font-cond text-sm font-semibold tracking-caps uppercase text-ink-light active:bg-panel active:text-ink transition-colors text-left"
               onClick={handleNewGame}
             >
               New game
             </button>
           </div>
         )}
+      </div>
+
+      <div className="md:hidden font-cond text-[11px] font-semibold tracking-label text-ink-light truncate">
+        <MatchMeta />
+      </div>
+
+      <div className="flex md:hidden gap-2 items-center">
+        {voiceBtn}
+        <button className={hdrBtn} onClick={undo}>Undo</button>
       </div>
     </div>
   )

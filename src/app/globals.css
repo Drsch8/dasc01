@@ -2,20 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Broadcast palette (option 1a) ────────────────────────────────
+   TV oche board: near-black stage, one red accent marking the
+   thrower, green for anything checkout-related.                   */
 :root {
-  --bg: #f7f5f0;
-  --paper: #fdfcf8;
-  --ink: #1a1a18;
-  --ink-light: #46463f;
-  --ink-faint: #a8a59e;
-  --rule: #bfbcb5;
-  --finish: #2d6a2d;
-  --finish-bg: #edf7ed;
-  --bogey: #8b1a1a;
-  --bogey-bg: #fdf0f0;
-  --caution: #7a5c00;
-  --caution-bg: #fdf8ec;
-  --bust: #c0392b;
+  --bg: #0d0f13;          /* stage / page */
+  --paper: #16191f;       /* raised panel — active player, cards */
+  --panel: #14171d;       /* recessed panel — round tiles, list rows */
+  --key: #1b1f27;         /* keypad key face */
+  --ink: #f2f4f7;
+  --ink-light: #8b93a1;
+  --ink-faint: #5d646f;
+  --rule: #1e222a;        /* hairline separators */
+  --rule-strong: #303643; /* outlined buttons */
+  --accent: #d63a26;      /* thrower bar, selected chips */
+  --accent-dim: #7d2418;
+  --p2: #2f6fe8;          /* second player marker */
+  --finish: #35c66b;
+  --finish-bg: rgba(53, 198, 107, 0.12);
+  --bogey: #e8804a;
+  --bogey-bg: rgba(232, 128, 74, 0.12);
+  --caution: #d9a520;
+  --caution-bg: rgba(217, 165, 32, 0.12);
+  --bust: #ff5f45;
 }
 
 * {
@@ -25,11 +34,24 @@
 html,
 body {
   height: 100%;
+  background: var(--bg);
 }
 
 /* Prevent pull-to-refresh on iOS */
 body {
   overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Anton is a single-weight face — never let the browser fake a bolder one. */
+.font-num {
+  font-weight: 400;
+  font-synthesis-weight: none;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--ink);
 }
 
 @keyframes winner-bounce-in {
@@ -49,4 +71,3 @@ body {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
-

@@ -2,8 +2,8 @@
   "name": "Darts",
   "short_name": "Darts",
   "display": "standalone",
-  "background_color": "#f7f5f0",
-  "theme_color": "#1a1a18",
+  "background_color": "#0d0f13",
+  "theme_color": "#0d0f13",
   "start_url": "/",
   "icons": [
     {

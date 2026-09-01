@@ -30,7 +30,7 @@ const HELP_SECTIONS = [
   {
     title: 'Voice (desktop / Chrome)',
     items: [
-      ['🎙', 'Tap the mic icon to enable. Say the score — e.g. "sixty", "one forty", "max". Tap again to mute.'],
+      ['Mic', 'Tap the mic icon to enable. Say the score — e.g. "sixty", "one forty", "max". Tap again to mute.'],
     ],
   },
   {
@@ -53,10 +53,10 @@ function HelpOverlay({ onClose }: { onClose: () => void }) {
       >
         <div className="max-w-2xl mx-auto flex flex-col gap-8">
           <div className="flex items-center justify-between">
-            <span className="font-display font-bold text-2xl">How to use</span>
+            <span className="font-num text-2xl tracking-[0.02em] uppercase">How to use</span>
             <button
               onClick={onClose}
-              className="font-mono text-sm text-ink-light active:text-ink px-3 py-1.5 border border-rule active:border-ink transition-colors"
+              className="font-cond text-[13px] font-semibold tracking-caps uppercase text-ink-light active:text-ink px-3 py-1.5 border border-rule-strong active:border-ink transition-colors"
             >
               ✕ Close
             </button>
@@ -64,13 +64,13 @@ function HelpOverlay({ onClose }: { onClose: () => void }) {
 
           {HELP_SECTIONS.map(section => (
             <div key={section.title}>
-              <div className="text-2xs tracking-[0.12em] uppercase text-ink-light font-mono mb-3">
+              <div className="font-cond text-[11px] font-semibold tracking-label uppercase text-ink-faint mb-2.5">
                 {section.title}
               </div>
-              <div className="bg-paper border border-rule divide-y divide-rule">
+              <div className="bg-paper divide-y divide-rule">
                 {section.items.map(([key, desc]) => (
                   <div key={key} className="flex gap-4 px-4 py-3">
-                    <span className="font-mono text-sm text-ink shrink-0 w-24">{key}</span>
+                    <span className="font-cond text-[15px] font-semibold tracking-[0.04em] uppercase text-ink shrink-0 w-28">{key}</span>
                     <span className="text-sm text-ink-light">{desc}</span>
                   </div>
                 ))}
@@ -80,7 +80,7 @@ function HelpOverlay({ onClose }: { onClose: () => void }) {
 
           <button
             onClick={onClose}
-            className="w-full border border-rule py-3 font-mono text-sm text-ink-light active:border-ink active:text-ink transition-colors"
+            className="w-full border border-rule-strong py-3 font-cond text-[15px] font-semibold tracking-caps uppercase text-ink-light active:border-ink active:text-ink transition-colors"
           >
             Got it
           </button>
@@ -122,40 +122,100 @@ export function SetupScreen() {
     window.scrollTo(0, 0)
   }
 
-  const input = 'w-full border border-rule bg-bg px-3 py-2 font-mono text-sm text-ink outline-none focus:border-ink'
-  const fieldLabel = 'block text-2xs tracking-[0.12em] uppercase text-ink-light mb-2'
+  const input = 'w-full bg-paper px-3 py-2.5 font-cond text-lg tracking-[0.06em] uppercase text-ink placeholder:text-ink-faint placeholder:normal-case outline-none border-none focus:bg-key'
+  const sectionLabel = 'block font-cond text-[11px] font-semibold tracking-label uppercase text-ink-faint mb-2.5'
+  const fieldLabel = 'block font-cond text-xs tracking-[0.14em] uppercase text-ink-light mb-1.5'
 
   return (
     <div className="h-dvh flex flex-col bg-bg">
-      <div className="shrink-0 flex items-end justify-between px-4 pt-8 pb-6 md:px-12 md:pt-12 md:pb-8">
-        <div className="flex items-end gap-5">
-          <h1 className="font-display font-black text-[clamp(3rem,8vw,5rem)] leading-[0.9] tracking-tight">
-            Darts
+      <div className="shrink-0 flex items-end justify-between px-4 pt-6 pb-4 md:px-12 md:pt-10 md:pb-6 border-b border-rule">
+        <div className="flex items-end gap-3">
+          <h1 className="font-num text-[clamp(2.5rem,8vw,4rem)] leading-[0.9] tracking-[0.01em]">
+            501
           </h1>
           <Link
             href="/cricket"
-            className="font-display font-black text-[clamp(3rem,8vw,5rem)] leading-[0.9] tracking-tight text-ink-faint active:text-ink transition-colors"
+            className="font-cond text-[15px] font-semibold tracking-label uppercase text-ink-light active:text-ink transition-colors pb-1.5"
           >
             Cricket
           </Link>
         </div>
         <button
           onClick={() => setShowHelp(true)}
-          className="font-mono text-sm text-ink-light active:text-ink border border-rule active:border-ink px-3 py-1.5 transition-colors active:scale-[0.97] transition-transform duration-100 mb-1"
+          className="font-cond text-[13px] font-semibold tracking-caps uppercase text-ink-light active:text-ink border border-rule-strong active:border-ink px-3 py-1.5 transition-colors active:scale-[0.97] transition-transform duration-100 mb-1"
         >
-          ?
+          Rules
         </button>
       </div>
 
       {showHelp && <HelpOverlay onClose={() => setShowHelp(false)} />}
 
-      <div className="flex-1 overflow-y-auto px-4 pb-6 md:px-12 md:pb-12">
+      <div className="flex-1 overflow-y-auto px-4 py-5 md:px-12 md:py-8">
       <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
 
         {/* ── Config form ── */}
-        <div className="bg-paper border border-rule w-full md:w-[380px] md:flex-shrink-0 p-4 md:p-8 flex flex-col gap-3 md:gap-6">
+        <div className="w-full md:w-[420px] md:flex-shrink-0 flex flex-col gap-6">
+
           <div>
-            <label className={fieldLabel}>Mode</label>
+            <span className={sectionLabel}>Players</span>
+            <div className="flex flex-col gap-3">
+              <PlayerNameInput label="Player 1" value={p1} onChange={setP1} inputClassName={input} accent="var(--accent)" />
+              {trainingMode === 'match' && (
+                <PlayerNameInput label="Player 2" value={p2} onChange={setP2} inputClassName={input} onEnter={handleStart} accent="var(--p2)" />
+              )}
+            </div>
+          </div>
+
+          <div>
+            <span className={sectionLabel}>Format</span>
+            <div className="flex flex-col gap-3.5">
+              <div>
+                <label className={fieldLabel}>Start</label>
+                <PillGroup
+                  numeric
+                  options={START_SCORES.map(s => ({ label: String(s), value: s }))}
+                  value={startScore}
+                  onChange={setStartScore}
+                />
+              </div>
+
+              <div>
+                <label className={fieldLabel}>Out</label>
+                <PillGroup
+                  options={[
+                    { label: 'Double', value: 'double' as OutRule },
+                    { label: 'Single', value: 'single' as OutRule },
+                  ]}
+                  value={outRule}
+                  onChange={setOutRule}
+                />
+              </div>
+
+              <div className="flex gap-2">
+                <div className="flex-1">
+                  <label className={fieldLabel}>Legs</label>
+                  <PillGroup
+                    numeric
+                    options={LEGS_OPTIONS.map(n => ({ label: String(n), value: n }))}
+                    value={legsToWin}
+                    onChange={setLegsToWin}
+                  />
+                </div>
+                <div className="flex-1">
+                  <label className={fieldLabel}>Sets</label>
+                  <PillGroup
+                    numeric
+                    options={SETS_OPTIONS.map(n => ({ label: String(n), value: n }))}
+                    value={setsToWin}
+                    onChange={setSetsToWin}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <span className={sectionLabel}>Mode</span>
             <PillGroup
               options={[
                 { label: 'Match', value: 'match' },
@@ -166,55 +226,11 @@ export function SetupScreen() {
             />
           </div>
 
-          <PlayerNameInput label="Player 1" value={p1} onChange={setP1} inputClassName={input} />
-          {trainingMode === 'match' && (
-            <PlayerNameInput label="Player 2" value={p2} onChange={setP2} inputClassName={input} onEnter={handleStart} />
-          )}
-
-          <div>
-            <label className={fieldLabel}>Starting Score</label>
-            <PillGroup
-              options={START_SCORES.map(s => ({ label: String(s), value: s }))}
-              value={startScore}
-              onChange={setStartScore}
-            />
-          </div>
-
-          <div>
-            <label className={fieldLabel}>Out Rule</label>
-            <PillGroup
-              options={[
-                { label: 'Double out', value: 'double' as OutRule },
-                { label: 'Single out', value: 'single' as OutRule },
-              ]}
-              value={outRule}
-              onChange={setOutRule}
-            />
-          </div>
-
-          <div>
-            <label className={fieldLabel}>Legs to win (per set)</label>
-            <PillGroup
-              options={LEGS_OPTIONS.map(n => ({ label: String(n), value: n }))}
-              value={legsToWin}
-              onChange={setLegsToWin}
-            />
-          </div>
-
-          <div>
-            <label className={fieldLabel}>Sets to win</label>
-            <PillGroup
-              options={SETS_OPTIONS.map(n => ({ label: String(n), value: n }))}
-              value={setsToWin}
-              onChange={setSetsToWin}
-            />
-          </div>
-
           <button
             onClick={handleStart}
-            className="bg-ink text-bg py-3 font-mono text-sm tracking-[0.06em] active:opacity-80 active:scale-[0.98] transition-all duration-100 w-full"
+            className="bg-ink text-bg py-5 font-cond text-xl font-bold tracking-label uppercase active:opacity-80 active:scale-[0.98] transition-all duration-100 w-full border-none cursor-pointer"
           >
-            Start Game
+            Throw first dart
           </button>
         </div>
 

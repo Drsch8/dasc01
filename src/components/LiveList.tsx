@@ -54,30 +54,30 @@ export function LiveList() {
     : 'grid-cols-[minmax(0,1fr)_minmax(0,1fr)_2.5rem_minmax(0,1fr)_minmax(0,1fr)]'
 
   // Cells use flex for vertical centering; border-b stretches with cell height
-  const cL = 'flex items-center px-2 py-3 font-mono border-b border-rule/40'       // left-aligned
-  const cR = 'flex items-center justify-end px-2 py-3 font-mono border-b border-rule/40'  // right-aligned
-  const cC = 'flex items-center justify-center px-1 py-3 font-mono border-b border-rule/40'  // centered
+  const cL = 'flex items-center px-2.5 py-2.5 border-b border-rule'       // left-aligned
+  const cR = 'flex items-center justify-end px-2.5 py-2.5 border-b border-rule'  // right-aligned
+  const cC = 'flex items-center justify-center px-1 py-2.5 border-b border-rule'  // centered
 
   function completedScore(entry: RoundEntry | null) {
     if (!entry) return null
-    return <span className={`text-2xl md:text-base font-semibold ${entry.bust ? 'text-bust' : 'text-ink'}`}>{entry.score}</span>
+    return <span className={`font-num text-2xl md:text-lg leading-none ${entry.bust ? 'text-bust' : 'text-ink'}`}>{entry.score}</span>
   }
 
   function completedRemain(entry: RoundEntry | null) {
     if (!entry) return null
-    return <span className="text-xl md:text-sm text-ink-light">{entry.remain}</span>
+    return <span className="font-cond text-base md:text-sm tracking-[0.1em] text-ink-faint leading-none">{entry.remain}</span>
   }
 
   function activeScore() {
     return (
-      <span className={`font-bold text-2xl md:text-base leading-tight
-        ${isInvalid ? 'text-bust' : 'text-ink'}`}>
-        {inputStr || '\u00A0\u00A0'}
+      <span className={`font-num text-2xl md:text-lg leading-none border-b-2 pb-0.5 min-w-[2.5rem] inline-block
+        ${isInvalid ? 'text-bust border-bust' : 'text-ink border-accent'}`}>
+        {inputStr || ' '}
       </span>
     )
   }
 
-  const hdr = 'flex items-center px-2 py-1.5 font-mono text-xs uppercase tracking-wide text-ink-faint border-b border-rule'
+  const hdr = 'flex items-center px-2.5 py-1.5 font-cond text-[11px] font-semibold uppercase tracking-label text-ink-faint border-b border-rule'
   const hdrR = `${hdr} justify-end`
   const hdrC = `${hdr} justify-center px-1`
   const hdrL = hdr
@@ -85,7 +85,7 @@ export function LiveList() {
   const innerW = training ? 'w-[260px]' : 'w-full'
 
   return (
-    <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto flex flex-col">
+    <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto flex flex-col bg-bg">
 
       {/* ── Sticky header ── */}
       <div className="sticky top-0 z-10 bg-bg shrink-0 flex justify-center">
@@ -111,14 +111,14 @@ export function LiveList() {
         {completedRounds.map((round, i) => (
           <Fragment key={i}>
             {training && (
-              <div className={`${cR} text-ink-faint text-sm`}>{(i + 1) * 3}</div>
+              <div className={`${cR} font-cond text-sm tracking-[0.1em] text-ink-faint`}>{(i + 1) * 3}</div>
             )}
             {/* p0 score — outer left */}
             <div className={cL}>{completedScore(round.p0)}</div>
             {/* p0 remain — toward center */}
             <div className={cR}>{completedRemain(round.p0)}</div>
             {!training && (
-              <div className={`${cC} text-ink-faint text-sm`}>{(i + 1) * 3}</div>
+              <div className={`${cC} font-cond text-sm tracking-[0.1em] text-ink-faint`}>{(i + 1) * 3}</div>
             )}
             {/* p1 remain — toward center */}
             {!training && <div className={cL}>{completedRemain(round.p1)}</div>}
@@ -130,7 +130,7 @@ export function LiveList() {
         {/* Live row */}
         <Fragment key="live">
           {training && (
-            <div className={`${cR} text-ink-faint text-sm`}>{(rounds.length + 1) * 3}</div>
+            <div className={`${cR} font-cond text-sm tracking-[0.1em] text-ink-faint`}>{(rounds.length + 1) * 3}</div>
           )}
 
           {/* P0 score — outer left */}
@@ -149,7 +149,7 @@ export function LiveList() {
 
           {!training && <>
             {/* dart# center */}
-            <div className={`${cC} text-ink-faint text-sm`}>{liveDartNum * 3}</div>
+            <div className={`${cC} font-cond text-sm tracking-[0.1em] text-ink-faint`}>{liveDartNum * 3}</div>
 
             {/* P1 remain — toward center */}
             <div className={cL}>

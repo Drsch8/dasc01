@@ -8,9 +8,11 @@ interface Props {
   onChange: (v: string) => void
   inputClassName?: string
   onEnter?: () => void
+  /** Colour of the marker bar down the left edge. */
+  accent?: string
 }
 
-export function PlayerNameInput({ label, value, onChange, inputClassName, onEnter }: Props) {
+export function PlayerNameInput({ label, value, onChange, inputClassName, onEnter, accent }: Props) {
   const [names, setNames] = useState<string[]>([])
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
@@ -36,23 +38,25 @@ export function PlayerNameInput({ label, value, onChange, inputClassName, onEnte
 
   return (
     <div ref={ref} className="relative">
-      <label className="block text-2xs tracking-[0.12em] uppercase text-ink-light mb-2">{label}</label>
-      <input
-        className={inputClassName}
-        value={value}
-        placeholder={label}
-        maxLength={20}
-        onChange={e => { onChange(e.target.value); setOpen(true) }}
-        onFocus={() => setOpen(true)}
-        onKeyDown={e => { if (e.key === 'Enter') { setOpen(false); onEnter?.() } }}
-      />
+      <label className="block font-cond text-[11px] font-semibold tracking-label uppercase text-ink-faint mb-2">{label}</label>
+      <div className="flex" style={accent ? { borderLeft: `4px solid ${accent}` } : undefined}>
+        <input
+          className={inputClassName}
+          value={value}
+          placeholder={label}
+          maxLength={20}
+          onChange={e => { onChange(e.target.value); setOpen(true) }}
+          onFocus={() => setOpen(true)}
+          onKeyDown={e => { if (e.key === 'Enter') { setOpen(false); onEnter?.() } }}
+        />
+      </div>
       {open && filtered.length > 0 && (
-        <div className="absolute left-0 right-0 top-full z-20 border border-rule bg-paper shadow-md max-h-48 overflow-y-auto">
+        <div className="absolute left-0 right-0 top-full z-20 border border-rule-strong bg-paper shadow-lg max-h-48 overflow-y-auto">
           {filtered.map(name => (
             <button
               key={name}
               type="button"
-              className="w-full text-left px-3 py-1.5 font-mono text-sm text-ink active:bg-bg transition-colors"
+              className="w-full text-left px-3 py-2 font-cond text-base tracking-[0.06em] uppercase text-ink active:bg-key transition-colors"
               onMouseDown={() => { onChange(name); setOpen(false) }}
             >
               {name}

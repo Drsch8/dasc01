@@ -1,17 +1,23 @@
 import type { Metadata, Viewport } from 'next'
-import { DM_Mono, Playfair_Display } from 'next/font/google'
+import { Anton, Barlow, Barlow_Condensed } from 'next/font/google'
 import './globals.css'
 
-const dmMono = DM_Mono({
-  weight: ['400', '500'],
+const anton = Anton({
+  weight: ['400'],
   subsets: ['latin'],
-  variable: '--font-dm-mono',
+  variable: '--font-anton',
 })
 
-const playfair = Playfair_Display({
-  weight: ['700', '900'],
+const barlowCondensed = Barlow_Condensed({
+  weight: ['400', '500', '600', '700'],
   subsets: ['latin'],
-  variable: '--font-playfair',
+  variable: '--font-condensed',
+})
+
+const barlow = Barlow({
+  weight: ['400', '500', '600'],
+  subsets: ['latin'],
+  variable: '--font-barlow',
 })
 
 export const metadata: Metadata = {
@@ -34,12 +40,13 @@ export const viewport: Viewport = {
   initialScale: 1,
   userScalable: false,
   viewportFit: 'cover',
+  themeColor: '#0d0f13',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${dmMono.variable} ${playfair.variable}`}>
-      <body className="font-mono bg-bg text-ink text-sm min-h-screen">{children}</body>
+    <html lang="en" className={`${anton.variable} ${barlowCondensed.variable} ${barlow.variable}`}>
+      <body className="font-sans bg-bg text-ink text-sm min-h-screen antialiased">{children}</body>
     </html>
   )
 }

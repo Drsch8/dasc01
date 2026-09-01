@@ -15,7 +15,7 @@ export function GameLog() {
     <div className="flex-1 overflow-y-auto bg-bg">
       <div className="px-3 py-2">
         {/* Header */}
-        <div className="grid grid-cols-[2.5rem_1fr_1fr] gap-2 text-[10px] tracking-[0.1em] uppercase text-ink-faint border-b border-rule pb-1.5 mb-0.5 font-mono">
+        <div className="grid grid-cols-[2.5rem_1fr_1fr] gap-2 text-[10px] tracking-[0.1em] uppercase text-ink-faint border-b border-rule pb-1.5 mb-0.5 font-cond">
           <span>#</span>
           <span>{config.p1}</span>
           <span className="text-right">{config.p2}</span>
@@ -31,7 +31,7 @@ export function GameLog() {
             const p0 = round.p0
             const p1 = round.p1
             return (
-              <div key={i} className="grid grid-cols-[2.5rem_1fr_1fr] gap-2 text-[11px] border-b border-rule/40 py-0.5 items-center font-mono">
+              <div key={i} className="grid grid-cols-[2.5rem_1fr_1fr] gap-2 text-[11px] border-b border-rule/40 py-0.5 items-center font-cond">
                 <span className="text-ink-faint">{i + 1}</span>
                 <span>
                   {p0 ? (

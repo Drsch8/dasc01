@@ -11,28 +11,43 @@ export function QuickScores() {
   const canFinish = isFinishable(currentScore)
 
   return (
-    <div className="grid grid-cols-6 md:grid-cols-12 gap-px bg-rule border-t border-rule shrink-0">
-      {QUICK_SCORE_VALUES.map((val, i) => {
-        const isFinish = val === FINISH_SENTINEL
+    <div className="shrink-0">
+      <div className="flex items-center justify-between px-4 py-1.5 border-t border-rule">
+        <span className="font-cond text-[11px] font-semibold tracking-label text-ink-faint">QUICK SCORE</span>
+        <span className="hidden md:inline font-cond text-[11px] font-semibold tracking-label text-ink-faint">F1–F12</span>
+      </div>
 
-        let cls = 'bg-paper text-ink active:bg-ink-faint'
-        if (isFinish && canFinish) cls = 'bg-finish-bg text-finish active:bg-finish/10'
-        else if (isFinish) cls = 'bg-paper text-ink-faint'
+      <div className="grid grid-cols-6 md:grid-cols-12 gap-0.5 bg-bg px-0.5 pb-0.5">
+        {QUICK_SCORE_VALUES.map((val, i) => {
+          const isFinish = val === FINISH_SENTINEL
+          const isRem = val === REM_SENTINEL
+          const isWord = isFinish || isRem
 
-        return (
-          <button
-            key={i}
-            onClick={() => quickScore(val)}
-            onTouchEnd={e => (e.currentTarget as HTMLElement).blur()}
-            className={`py-3 text-center font-mono text-sm md:text-base select-none cursor-pointer border-none outline-none touch-none transition-colors active:scale-[0.97] transition-transform duration-75 ${cls}`}
-          >
-            <span className="hidden md:block text-xs leading-none mb-0.5 text-ink-light">
-              {FKEY_LABELS[i]}
-            </span>
-            {QUICK_SCORE_LABELS[i]}
-          </button>
-        )
-      })}
+          let cls = 'bg-key text-ink active:bg-rule-strong'
+          if (isFinish && canFinish) cls = 'bg-finish text-bg active:opacity-80'
+          else if (isFinish) cls = 'bg-panel text-ink-faint'
+          else if (isRem) cls = 'bg-panel text-ink-light active:bg-rule-strong'
+
+          return (
+            <button
+              key={i}
+              onClick={() => quickScore(val)}
+              onTouchEnd={e => (e.currentTarget as HTMLElement).blur()}
+              className={`py-3 text-center select-none cursor-pointer border-none outline-none touch-none
+                transition-colors active:scale-[0.97] transition-transform duration-75
+                ${isWord
+                  ? 'font-cond text-[15px] font-bold tracking-caps uppercase'
+                  : 'font-num text-2xl md:text-xl leading-none'}
+                ${cls}`}
+            >
+              <span className="hidden md:block font-cond text-[10px] font-medium leading-none mb-1 text-ink-faint">
+                {FKEY_LABELS[i]}
+              </span>
+              {QUICK_SCORE_LABELS[i]}
+            </button>
+          )
+        })}
+      </div>
     </div>
   )
 }
