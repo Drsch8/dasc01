@@ -100,7 +100,9 @@ jobs:
       # 60 days with no repository activity — which would silently switch off
       # the keepalive above. The guard means no commit is made while the repo is
       # being worked on normally.
-      - uses: actions/checkout@v4
+      # v7 runs on node24; v4 targets the deprecated node20 and GitHub now
+      # force-migrates it, which is what raised the warning annotation.
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0    # full clone; pushing from a shallow one can be rejected
 
