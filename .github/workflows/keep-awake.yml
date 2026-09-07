@@ -1,31 +1,29 @@
 name: Keep Supabase awake
 
-# Supabase pauses a free project after 7 days with no database activity, so we
-# run a real query against it every couple of days.
+# Supabase pauses a free project after 7 days with no database activity.
 #
-# There is no repo-keepalive step here: GitHub only auto-disables scheduled
-# workflows in *public* repositories after 60 days of inactivity, and this repo
-# is private. If it is ever made public again, that rule applies and this
-# workflow will need a step that keeps the repo active.
+# The first version of this workflow issued an anon SELECT through PostgREST.
+# That ran green on schedule from 2026-09-03 and Supabase *still* sent a pause
+# warning on 2026-09-07 — so a read does not count. This version performs a
+# write instead, which produces WAL and disk activity that cannot be mistaken
+# for an idle project.
 
 on:
   schedule:
-    # Every 2 days at 06:00 UTC — comfortable margin on the 7-day pause window.
-    - cron: '0 6 */2 * *'
+    # Daily. The window is 7 days; a day of margin means several runs can be
+    # missed (GitHub drops scheduled runs under load) without the project
+    # lapsing.
+    - cron: '0 6 * * *'
   workflow_dispatch:        # also runnable by hand from the Actions tab
+
+permissions:
+  contents: write           # used only by the repo-keepalive step below
 
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      # Must be a query against a real table: a bare request to the project URL
-      # can be answered by the API gateway without ever reaching Postgres, which
-      # would not reset the inactivity clock. `players` has a public SELECT
-      # policy, so the anon key is enough.
-      #
-      # `select=*` rather than a named column on purpose — this job runs
-      # unattended for months, and it should not break if a column is renamed.
-      - name: Query Postgres
+      - name: Write the heartbeat row
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
@@ -49,33 +47,73 @@ jobs:
               ;;
           esac
 
-          # Tolerate a trailing slash on the secret.
-          base="${SUPABASE_URL%/}"
+          base="${SUPABASE_URL%/}"   # tolerate a trailing slash on the secret
+          now=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
           code=$(curl -sS -o response.json -w '%{http_code}' \
+            -X PATCH \
             -H "apikey: $SUPABASE_ANON_KEY" \
             -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
-            "$base/rest/v1/players?select=*&limit=1")
+            -H "Content-Type: application/json" \
+            -H "Prefer: return=representation" \
+            -d "{\"pinged_at\":\"$now\"}" \
+            "$base/rest/v1/heartbeat?id=eq.1")
 
-          echo "REST status: $code"
+          echo "PATCH /heartbeat -> $code"
 
           if [ "$code" = "200" ]; then
-            # Body is discarded on success — no reason to put player names in a log.
-            echo "Database reached — pause timer reset."
-            exit 0
+            # return=representation echoes the updated rows. An empty array means
+            # the statement matched nothing, so nothing was actually written —
+            # a green run that did no work is exactly the failure being fixed.
+            if grep -q '"pinged_at"' response.json; then
+              echo "Heartbeat written at $now — pause timer reset."
+              cat response.json
+              exit 0
+            fi
+            echo "::error::Update matched no rows. The heartbeat row (id=1) is missing, or the RLS update policy is not in place. Re-run supabase/migrations/004_heartbeat.sql."
+            exit 1
           fi
 
-          # On failure PostgREST returns a JSON error that names the exact
-          # problem (bad column, missing table, RLS denial). Show it.
           echo "Response body:"
           cat response.json || true
           echo
 
+          if [ "$code" = "404" ]; then
+            echo "::warning::No heartbeat table yet — apply supabase/migrations/004_heartbeat.sql. Falling back to a read so the project is not left untouched."
+            fallback=$(curl -sS -o fallback.json -w '%{http_code}' \
+              -H "apikey: $SUPABASE_ANON_KEY" \
+              -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+              "$base/rest/v1/players?select=*&limit=1")
+            echo "GET /players -> $fallback"
+            echo "::error::Heartbeat table missing; run the migration. A read alone has already proven insufficient to prevent pausing."
+            exit 1
+          fi
+
           case "$code" in
-            400) echo "::error::Bad request (400) — the query is invalid for this schema; see the body above." ;;
-            401|403) echo "::error::Rejected ($code) — SUPABASE_ANON_KEY is wrong, or the RLS policy on players changed." ;;
-            404) echo "::error::Not found (404) — check the project URL, or whether the players table still exists." ;;
-            5*) echo "::error::Supabase returned $code — likely a transient outage; the next run will retry." ;;
+            401|403) echo "::error::Rejected ($code) — SUPABASE_ANON_KEY is wrong, or the heartbeat RLS policy is missing." ;;
+            5*) echo "::error::Supabase returned $code — likely a transient outage; tomorrow's run will retry." ;;
             *) echo "::error::Unexpected status $code." ;;
           esac
           exit 1
+
+      # This repo is public, so GitHub auto-disables scheduled workflows after
+      # 60 days with no repository activity — which would silently switch off
+      # the keepalive above. The guard means no commit is made while the repo is
+      # being worked on normally.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0    # full clone; pushing from a shallow one can be rejected
+
+      - name: Reset the 60-day scheduled-workflow clock
+        run: |
+          age=$(( ( $(date +%s) - $(git log -1 --format=%ct) ) / 86400 ))
+          echo "Newest commit is $age day(s) old."
+          if [ "$age" -ge 50 ]; then
+            git config user.name  "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit --allow-empty -m "chore: keepalive"
+            git push
+            echo "Pushed a keepalive commit."
+          else
+            echo "Repo is active; nothing to do."
+          fi
